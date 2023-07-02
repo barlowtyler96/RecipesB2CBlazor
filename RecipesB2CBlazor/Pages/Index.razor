@@ -1,0 +1,47 @@
+﻿@page "/"
+@using System.Net.Http.Json
+@using System.Net.Http.Headers
+@using Microsoft.Identity.Web
+@inject IHttpClientFactory factory
+@inject ITokenAcquisition tokenAqcuisition
+
+<PageTitle>Index</PageTitle>
+
+<div class="h1 text-center">Hello! Welcome to my site. This is where I store some of my favorite recipes.</div>
+
+<div class="h3 text-center">Recently Added Recipes</div>
+
+@if (recipes == null)
+{
+    <div class="h1">Loading...</div>
+}
+else
+{
+    <div class="container-fluid bg-primary">
+        <div class="row justify-content-center">
+            @foreach (var r in recipes)
+            {
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 m-3">
+                    <div class="card bg-dark text-center border-3 border-black rounded-4 h-100">
+                        <div class="h3 text-warning">@r.Name</div>
+                        <div class="h5 text-warning">@r.Description</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private List<RecipeModel>? recipes;
+    private HttpClient? client;
+
+    protected override async Task OnInitializedAsync()
+    {
+        client = factory.CreateClient("api"); // this name might need to be added back to settings
+
+        var accessToken = await tokenAqcuisition.GetAccessTokenForUserAsync(new[] { "Recipes.Read" });//might need the entire url for scope here
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        recipes = await client.GetFromJsonAsync<List<RecipeModel>>("Recipes/recent");
+    }
+}
