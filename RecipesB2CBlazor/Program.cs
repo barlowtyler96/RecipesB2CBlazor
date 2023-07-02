@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-
+using RecipesB2CBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,25 +22,30 @@ builder.Services.Configure<CookiePolicyOptions>(opts =>
 
 builder.Services.AddOptions();
 
-builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAd")
+builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C")
     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["DownstreamApi:Scopes"] })
-.AddInMemoryTokenCaches();
+    .AddInMemoryTokenCaches();
 
 builder.Services.AddRecipesService(builder.Configuration);
 
-
+builder.Services.AddControllersWithViews(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+}).AddMicrosoftIdentityUI();
 
 
 
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddOptions();
+builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAdB2C"));
+
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
-
-//builder.Services.AddHttpClient("api", opts =>
-//{
-//    opts.BaseAddress = new Uri(builder.Configuration.GetValue<string>("DownstreamApi:BaseUrl"));
-//});
 
 var app = builder.Build();
 
@@ -53,6 +58,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseCookiePolicy();
 
 app.UseRouting();
 
