@@ -7,7 +7,8 @@ namespace RecipesB2CBlazor.Services
         Task<RecipeModel> AddAsync(RecipeModel recipeModel);
         Task DeleteAsync(int id);
         Task<RecipeModel> EditAsync(RecipeModel recipeModel);
-        Task<List<RecipeModel>> GetAsync();
+        Task<List<RecipeModel>> GetAllAsync();
         Task<RecipeModel> GetAsync(int id);
+        Task<List<RecipeModel>> GetRecentsAsync();
     }
 }
