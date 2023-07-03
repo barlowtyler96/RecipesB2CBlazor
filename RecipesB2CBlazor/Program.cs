@@ -4,38 +4,23 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using RecipesB2CBlazor.Services;
+using RecipesB2CBlazor.StartupConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddDistributedMemoryCache();
 
-builder.Services.Configure<CookiePolicyOptions>(opts =>
-{
-    opts.CheckConsentNeeded = context => true;
-    opts.MinimumSameSitePolicy = SameSiteMode.Unspecified;
-    opts.HandleSameSiteCookieCompatibility();
-});
+//builder.Services.Configure<CookiePolicyOptions>(opts =>
+//{
+//    opts.CheckConsentNeeded = context => true;
+//    opts.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+//    opts.HandleSameSiteCookieCompatibility();
+//});
 
-builder.Services.AddOptions();
-
-builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C")
-    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["DownstreamApi:Scopes"] })
-    .AddInMemoryTokenCaches();
-
-builder.Services.AddRecipesService(builder.Configuration);
-
-builder.Services.AddControllersWithViews(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-}).AddMicrosoftIdentityUI();
+builder.AddCustomServices();
+builder.AddAuthServices();
 
 builder.Services.AddRazorPages();
-
-builder.Services.AddOptions();
-builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAdB2C"));
 
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
