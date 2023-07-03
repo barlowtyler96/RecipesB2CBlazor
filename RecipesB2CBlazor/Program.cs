@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
-builder.Services.AddDistributedMemoryCache();
+//builder.Services.AddDistributedMemoryCache();
 
 builder.Services.Configure<CookiePolicyOptions>(opts =>
 {
