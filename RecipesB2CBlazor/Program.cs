@@ -7,9 +7,6 @@ using RecipesB2CBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-
 //builder.Services.AddDistributedMemoryCache();
 
 builder.Services.Configure<CookiePolicyOptions>(opts =>
@@ -34,9 +31,6 @@ builder.Services.AddControllersWithViews(options =>
         .Build();
     options.Filters.Add(new AuthorizeFilter(policy));
 }).AddMicrosoftIdentityUI();
-
-
-
 
 builder.Services.AddRazorPages();
 
