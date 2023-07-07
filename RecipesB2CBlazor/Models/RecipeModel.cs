@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 namespace RecipesB2CBlazor.Models;
 
 public class RecipeModel
@@ -20,5 +21,9 @@ public class RecipeModel
     [Required]
     [MaxLength(1000)]
     public string? Instructions { get; set; }
+
+    [Required]
+    [MaxLength(200)]
+    public string? ImagePath { get; set; }
 }
 
