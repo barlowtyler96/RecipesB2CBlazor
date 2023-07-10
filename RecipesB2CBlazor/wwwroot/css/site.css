@@ -1,8 +1,8 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 .resized-image {
-    width: 200px; /* Adjust the desired width */
-    height: auto; /* Maintain aspect ratio */
+    width: 200px;
+    height: auto;
 }
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
