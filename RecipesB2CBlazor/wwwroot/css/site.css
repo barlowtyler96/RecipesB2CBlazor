@@ -1,8 +1,20 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 .resized-image {
-    width: 200px;
+    width: 50%;
     height: auto;
+}
+.custom-primary-color {
+    background-color: #CFF9F2;
+}
+.text-xxl{
+    font-size: 50px;
+}
+.text-xl{
+    font-size: 30px;
+}
+.text-lg {
+    font-size: 20px;
 }
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
