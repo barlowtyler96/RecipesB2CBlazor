@@ -1,28 +1,15 @@
 ﻿@page "/"
-@using System.Net.Http.Json
-@using System.Net.Http.Headers
 @using Microsoft.Identity.Web
 @using RecipesB2CBlazor.Services;
 @inject IRecipesService recipesService
-@inject IHttpClientFactory factory
-@inject ITokenAcquisition tokenAqcuisition
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 <PageTitle>Tyler's Recipes</PageTitle>
 
 
-
-@if (recipesList == null && recipeById == null)
+@if(recipesList is null)
 {
-    <div class="h1">Loading...</div>
-}
-else if(recipeById is not null)
-{
-    <div class="text-xxl fw-bold text-center m-3">@recipeById.Name</div>
-    <div>@recipeById.Description</div>
-    <div>@recipeById.Instructions</div>
-    <div>@recipeById.Ingredients</div>
-    //add back button here
+    <div class="text-xxl">Loading...</div>
 }
 else
 {
@@ -33,21 +20,29 @@ else
             @foreach (var r in recipesList)
             {
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mx-3 my-4">
-                    <div @onclick="() => LookUp(r.Id)" class="card custom-primary-color text-center text-dark border-2 border-dark py-3 h-100">
+                    <div @onclick="(() => ShowRecipe(r.Id))" class="card custom-primary-color text-center text-dark border-2 border-dark py-3 h-100">
                         <div class="h4 fw-bold">@r.Name</div>
                         <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
                         <p class="text-dark"><em>@r.Description</em></p>
                     </div>
                 </div>
             }
+            @if (ShowingRecipe)
+            {
+                <div class="container">
+                    <ViewRecipe RecipeId="@selectedRecipeId" />
+                    <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-warning">Hide</button>
+                </div>
+            }
         </div>
     </div>
+    
 }
 
 @code {
     private List<RecipeModel>? recipesList;
-    private RecipeModel? recipeById;
-    private int recipeId;
+    private int selectedRecipeId;
+    private bool ShowingRecipe { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,24 +52,20 @@ else
         }
         catch (Exception ex)
         {
-
             ConsentHandler.HandleException(ex);
         }
     }
 
-    private async Task<RecipeModel> LookUp(int recipeId)
+    private void ShowRecipe(int recipeId)
     {
-        try
+        selectedRecipeId = recipeId;
+        if (!ShowingRecipe)
         {
-            recipeById = await recipesService.GetAsync(recipeId);
-            return recipeById;
+            ShowingRecipe = true;
         }
-        catch (Exception ex)
+        else if(ShowingRecipe)
         {
-
-            ConsentHandler.HandleException(ex);
-            recipeById = new RecipeModel();
-            return recipeById;
+            ShowingRecipe = false;
         }
     }
 }
