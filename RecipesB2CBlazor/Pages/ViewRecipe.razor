@@ -1,12 +1,59 @@
-﻿@*<h3>ViewRecipe</h3>
-<div class="text-xxl fw-bold text-center m-3">@recipe.Name</div>
-<div class="container-fluid">
-	<div class="row">
-		@recipe.Ingredients
-		@recipe.Instructions
-	</div>
+﻿@using Microsoft.Identity.Web
+@using RecipesB2CBlazor.Services;
+@inject IRecipesService recipesService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
-</div>*@
+@if(recipe is null)
+{
+    <div>Loading...</div>
+}
+else if(recipe.Id == RecipeId)
+{
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="text-xl text-center">@recipe.Name</div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6 text-md text-center">
+                @recipe.Description
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var i in FormatIngredients(recipe.Ingredients))
+            {
+                <ul>
+                    <li>@i</li>
+                </ul>
+            }
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-9 text-md text-center">
+                @recipe.Instructions
+            </div>
+        </div>
+    </div>
+}
+
 @code {
+    private RecipeModel recipe;
+    [Parameter]
+    public int RecipeId { get; set; }
 
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            recipe = await recipesService.GetAsync(RecipeId);
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+    private string[] FormatIngredients(string ingredients)
+    {
+        var formattedIngredients = ingredients.Split('-');
+        return formattedIngredients;
+    }
 }
