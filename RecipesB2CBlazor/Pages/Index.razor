@@ -14,16 +14,17 @@
 }
 else
 {
-    <div class="text-xxl fw-bold text-center m-3">Hello! Welcome to Tyler's Recipes.</div>
+    <div class="text-xxl fw-bold text-center m-3">Welcome to Tyler's Recipes.</div>
     <div class="text-lg fw-bold text-center m-3">Recently Added Recipes</div>
+
     <div class="container-fluid">
         <div class="row justify-content-center">
             @foreach (var r in recipesList)
             {
                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 my-3">
                     <div @onclick="(() => ShowRecipe(r.Id))" 
-                        class="card custom-primary-color text-center border-1 shadow-lg px-1 m-3 h-100">
-                        <div class="h4 fw-bold py-2">@r.Name</div>
+                        class="card custom-primary-color text-center border-1 shadow-lg px-1 mx-3 h-100">
+                        <div class="h4 fw-bold pt-2">@r.Name</div>
                         <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
                         <p class="text-dark"><em>@r.Description</em></p>
                     </div>
@@ -31,13 +32,15 @@ else
             }
         </div>
     </div>
-    <div class="container-fluid text-center" id="viewrecipe">
+
+    <div class="container-fluid text-center my-5" id="viewrecipe">
         @if (ShowingRecipe)
         {
             <ViewRecipe RecipeId="@selectedRecipeId" />
-            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-warning col-6 my-3">Hide</button>
+            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-6 my-3">Hide</button>
         }
     </div>
+
     <div class="container-fluid">
         <Browse/>
     </div>
@@ -64,7 +67,7 @@ else
     {
         selectedRecipeId = recipeId;
         ShowingRecipe = !ShowingRecipe;
-
+        
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 }
