@@ -13,21 +13,14 @@ else if(recipe.Id == RecipeId)
         <div class="row justify-content-center">
             <div class="text-xl text-center">@recipe.Name</div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-6 text-md text-center">
-                @recipe.Description
-            </div>
-        </div>
         <div class="row">
-            @foreach (var i in FormatIngredients(recipe.Ingredients))
-            {
-                <ul>
+            <ul class="col-6 text-decoration-none">
+                @foreach (var i in FormatIngredients(recipe.Ingredients))
+                {
                     <li>@i</li>
-                </ul>
-            }
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-9 text-md text-center">
+                }
+            </ul>
+            <div class="col-6 text-md text-center">
                 @recipe.Instructions
             </div>
         </div>
@@ -35,7 +28,7 @@ else if(recipe.Id == RecipeId)
 }
 
 @code {
-    private RecipeModel recipe;
+    private RecipeModel? recipe;
     [Parameter]
     public int RecipeId { get; set; }
 
