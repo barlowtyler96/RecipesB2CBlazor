@@ -14,13 +14,13 @@ else if(recipe.Id == RecipeId)
             <div class="text-xl text-center">@recipe.Name</div>
         </div>
         <div class="row justify-content-center py-4">
-            <ul class="col-md-4 text-decoration-none">
+            <ul class="col-md-2">
                 @foreach (var i in FormatIngredients(recipe.Ingredients!))
                 {
-                    <li>@i</li>
+                    <li class="text-decoration-none">@i</li>
                 }
             </ul>
-            <div class="col-md-4 text-center">
+            <div class="col-md-6 text-center">
                 @recipe.Instructions
             </div>
         </div>
