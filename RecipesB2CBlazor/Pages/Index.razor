@@ -21,7 +21,7 @@ else
             {
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mx-3 my-4">
                     <div @onclick="(() => ShowRecipe(r.Id))" 
-                        class="card custom-primary-color text-center text-dark border-2 border-dark px-1 h-100">
+                        class="card custom-primary-color text-center border-1 shadow-lg px-1 h-100">
                         <div class="h4 fw-bold py-2">@r.Name</div>
                         <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
                         <p class="text-dark"><em>@r.Description</em></p>
@@ -30,10 +30,8 @@ else
             }
             @if (ShowingRecipe)
             {
-                <div class="container">
-                    <ViewRecipe RecipeId="@selectedRecipeId" />
-                    <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-warning">Hide</button>
-                </div>
+                <ViewRecipe RecipeId="@selectedRecipeId" />
+                <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-warning col-6">Hide</button>
             }
         </div>
     </div>
