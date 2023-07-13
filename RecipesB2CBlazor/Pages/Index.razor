@@ -20,8 +20,9 @@ else
             @foreach (var r in recipesList)
             {
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mx-3 my-4">
-                    <div @onclick="(() => ShowRecipe(r.Id))" class="card custom-primary-color text-center text-dark border-2 border-dark py-3 h-100">
-                        <div class="h4 fw-bold">@r.Name</div>
+                    <div @onclick="(() => ShowRecipe(r.Id))" 
+                        class="card custom-primary-color text-center text-dark border-2 border-dark px-1 h-100">
+                        <div class="h4 fw-bold py-2">@r.Name</div>
                         <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
                         <p class="text-dark"><em>@r.Description</em></p>
                     </div>
