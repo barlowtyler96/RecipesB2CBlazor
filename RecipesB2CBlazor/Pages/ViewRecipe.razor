@@ -5,7 +5,7 @@
 
 @if(recipe is null)
 {
-    <div>Loading...</div>
+    <div class="text-xxl text-center">Loading...</div>
 }
 else if(recipe.Id == RecipeId)
 {
@@ -13,14 +13,14 @@ else if(recipe.Id == RecipeId)
         <div class="row justify-content-center">
             <div class="text-xl text-center">@recipe.Name</div>
         </div>
-        <div class="row">
-            <ul class="col-6 text-decoration-none">
-                @foreach (var i in FormatIngredients(recipe.Ingredients))
+        <div class="row justify-content-center py-4">
+            <ul class="col-md-4 text-decoration-none">
+                @foreach (var i in FormatIngredients(recipe.Ingredients!))
                 {
                     <li>@i</li>
                 }
             </ul>
-            <div class="col-6 text-md text-center">
+            <div class="col-md-4 text-center">
                 @recipe.Instructions
             </div>
         </div>
@@ -31,7 +31,6 @@ else if(recipe.Id == RecipeId)
     private RecipeModel? recipe;
     [Parameter]
     public int RecipeId { get; set; }
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -44,6 +43,7 @@ else if(recipe.Id == RecipeId)
             ConsentHandler.HandleException(ex);
         }
     }
+
     private string[] FormatIngredients(string ingredients)
     {
         var formattedIngredients = ingredients.Split('-');

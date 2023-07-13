@@ -2,6 +2,7 @@
 @using Microsoft.Identity.Web
 @using RecipesB2CBlazor.Services;
 @inject IRecipesService recipesService
+@inject IJSRuntime JSRuntime 
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 <PageTitle>Tyler's Recipes</PageTitle>
@@ -19,24 +20,27 @@ else
         <div class="row justify-content-center">
             @foreach (var r in recipesList)
             {
-                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 my-3">
+                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 my-3">
                     <div @onclick="(() => ShowRecipe(r.Id))" 
-                        class="card custom-primary-color text-center border-1 shadow-lg px-1 h-100">
+                        class="card custom-primary-color text-center border-1 shadow-lg px-1 m-3 h-100">
                         <div class="h4 fw-bold py-2">@r.Name</div>
                         <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
                         <p class="text-dark"><em>@r.Description</em></p>
                     </div>
                 </div>
             }
-            @if (ShowingRecipe)
-            {
-                <ViewRecipe RecipeId="@selectedRecipeId" />
-                <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-warning col-6 my-3">Hide</button>
-            }
-            <Browse></Browse>
         </div>
     </div>
-    
+    <div class="container-fluid text-center" id="viewrecipe">
+        @if (ShowingRecipe)
+        {
+            <ViewRecipe RecipeId="@selectedRecipeId" />
+            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-warning col-6 my-3">Hide</button>
+        }
+    </div>
+    <div class="container-fluid">
+        <Browse/>
+    </div>
 }
 
 @code {
@@ -56,16 +60,11 @@ else
         }
     }
 
-    private void ShowRecipe(int recipeId)
+    private async Task ShowRecipe(int recipeId)
     {
         selectedRecipeId = recipeId;
-        if (!ShowingRecipe)
-        {
-            ShowingRecipe = true;
-        }
-        else if(ShowingRecipe)
-        {
-            ShowingRecipe = false;
-        }
+        ShowingRecipe = !ShowingRecipe;
+
+        await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 }
