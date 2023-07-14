@@ -1,6 +1,7 @@
 ﻿using Microsoft.Identity.Web;
 using Newtonsoft.Json;
 using RecipesB2CBlazor.Models;
+using System.Collections;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
@@ -121,7 +122,7 @@ public class RecipesService : IRecipesService
     {
         await PrepareAuthenticatedClient();
 
-        var response = await _httpClient.GetAsync($"{_RecipesBaseAddress}Recipes/{id}");
+        var response = await _httpClient.GetAsync($"{_RecipesBaseAddress}Recipes/id/{id}");
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
@@ -129,6 +130,22 @@ public class RecipesService : IRecipesService
             RecipeModel recipe = JsonConvert.DeserializeObject<RecipeModel>(content);
 
             return recipe;
+        }
+        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
+    }
+
+    public async Task<List<RecipeModel>> GetByKeyword(string keyword)
+    {
+        await PrepareAuthenticatedClient();
+
+        var response = await _httpClient.GetAsync($"{_RecipesBaseAddress}Recipes/keyword/{keyword}");
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            IEnumerable<RecipeModel> recipes = JsonConvert.DeserializeObject<IEnumerable<RecipeModel>>(content);
+
+            return recipes.ToList();
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }

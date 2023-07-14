@@ -9,6 +9,7 @@ namespace RecipesB2CBlazor.Services
         Task<RecipeModel> EditAsync(RecipeModel recipeModel);
         Task<List<RecipeModel>> GetAllAsync();
         Task<RecipeModel> GetAsync(int id);
+        Task<List<RecipeModel>> GetByKeyword(string keyword);
         Task<List<RecipeModel>> GetRecentsAsync();
     }
 }
