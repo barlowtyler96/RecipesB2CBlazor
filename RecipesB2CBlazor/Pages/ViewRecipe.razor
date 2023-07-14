@@ -10,19 +10,21 @@
 else if(recipe.Id == RecipeId)
 {
     <div class="row">
-        <div class="text-xl text-center">@recipe.Name</div>
-        <div class="justify-content-center py-4">
-            <ul class="col-md-2">
-                @foreach (var i in FormatIngredients(recipe.Ingredients!))
-                {
-                    <li class="text-decoration-none">@i</li>
-                }
-            </ul>
-            <div class="col-md-6 text-center">
-                @recipe.Instructions
-            </div>
+        <div class="text-xl text-center mt-5">@recipe.Name</div>
+    </div>
+    
+    <div class="row justify-content-center mt-5">
+        <ul class="col-md-3 list-unstyled">
+            @foreach (var i in FormatIngredients(recipe.Ingredients!))
+            {
+                <li>@i</li>
+            }
+        </ul>
+        <div class="col-md-6 text-center">
+            @recipe.Instructions
         </div>
     </div>
+
 }
 
 @code {
