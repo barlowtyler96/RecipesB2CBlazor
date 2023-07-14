@@ -10,6 +10,9 @@
     width: 50%;
     height: auto;
 }
+.bg-custom-primary {
+    background-color: #CFF9F2;
+}
 .custom-primary-color {
     background-color: #CFF9F2;
 }
