@@ -1,0 +1,34 @@
+﻿@using Microsoft.Identity.Web
+@using RecipesB2CBlazor.Services;
+@inject IRecipesService recipesService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+
+<div>
+    <input type="text" @bind="@keyword" />
+    <button @onclick="SearchForKeyword">Search</button>
+</div>
+
+@if (returnedRecipes != null)
+{
+    foreach (var recipe in returnedRecipes)
+    {
+        <p>@recipe.Name</p>
+        <p>@recipe.Description</p>
+    }
+}
+@code {
+    private string keyword;
+    private List<RecipeModel> returnedRecipes;
+
+    private async Task SearchForKeyword()
+    {
+        try
+        {
+            returnedRecipes = await recipesService.GetByKeyword(keyword);
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+}
