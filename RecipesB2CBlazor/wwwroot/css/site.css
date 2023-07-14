@@ -1,5 +1,11 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.card-pop {
+    transition: transform 0.3s ease;
+}
+.card-pop:hover {
+    transform: scale(1.05);
+}
 .resized-image {
     width: 50%;
     height: auto;
