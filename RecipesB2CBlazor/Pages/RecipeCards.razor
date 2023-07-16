@@ -1,0 +1,46 @@
+﻿@inject IRecipesService recipesService
+@inject IJSRuntime JSRuntime
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+
+@if (RecipesList is null)
+{
+    <div class="text-xxl">Loading...</div>
+}
+else
+{
+    @foreach (var r in RecipesList)
+    {
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 my-3">
+            <div @onclick="(() => ShowRecipe(r.Id))"
+                 class="card custom-primary-color text-center border-1 shadow-lg px-1 mx-3 h-100 card-pop">
+                <div class="text-lg fw-bold pt-2">@r.Name</div>
+                <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
+                <p><em>@r.Description</em></p>
+            </div>
+        </div>
+    }
+
+    @if (ShowingRecipe)
+    {
+        <ViewRecipe RecipeId="@SelectedRecipeId" />
+        <div class="d-flex justify-content-center">
+            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 my-3">Hide</button>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public List<RecipeModel>? RecipesList { get; set; }
+    private int SelectedRecipeId { get; set; }
+    private bool ShowingRecipe { get; set; } = false;
+
+    private async Task ShowRecipe(int recipeId)
+    {
+        SelectedRecipeId = recipeId;
+        ShowingRecipe = !ShowingRecipe;
+
+        await Task.Delay(100);
+        await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
+    }
+}

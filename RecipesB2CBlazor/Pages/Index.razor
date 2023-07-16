@@ -1,63 +1,42 @@
-﻿@page "/"
-@using Microsoft.Identity.Web
-@using RecipesB2CBlazor.Services;
-@inject IRecipesService recipesService
-@inject IJSRuntime JSRuntime 
+﻿@inject IRecipesService recipesService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+@page "/"
 
 <PageTitle>Tyler's Recipes</PageTitle>
-
-
-@if(recipesList is null)
-{
-    <div class="text-xxl">Loading...</div>
-}
-else
-{
+<div class="row">
     <div class="text-xxl fw-bold text-center m-3">Welcome to Tyler's Recipes.</div>
     <div class="text-lg fw-bold text-center m-3">Recently Added Recipes</div>
+</div>
+<div class="row justify-content-center">
+    <RecipeCards RecipesList="@recentRecipesList" />
+</div>
 
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            @foreach (var r in recipesList)
-            {
-                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 my-3">
-                    <div @onclick="(() => ShowRecipe(r.Id))" 
-                        class="card custom-primary-color text-center border-1 shadow-lg px-1 mx-3 h-100 card-pop">
-                        <div class="text-lg fw-bold pt-2">@r.Name</div>
-                        <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
-                        <p class="text-dark"><em>@r.Description</em></p>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+<div class="row justify-content-center">
+    <div class="text-xxl fw-bold text-center m-5">Browse</div>
+    <Search SearchCompleted="HandleSearchCompleted" />
+</div>
 
-    <div class="container-fluid my-5 bg-custom-primary" id="viewrecipe">
-        @if (ShowingRecipe)
-        {
-            <ViewRecipe RecipeId="@selectedRecipeId" />
-            <div class="d-flex justify-content-center">
-                <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 my-3">Hide</button>
-            </div>
-        }
-    </div>
-
-    <div class="container-fluid my-5">
-        <Browse/>
+@if (searchedRecipesList is not null)
+{
+    <div class="row">
+        <RecipeCards RecipesList="@searchedRecipesList" />
     </div>
 }
 
+<div class="row justify-content-center">
+    <Browse />
+</div>
+
 @code {
-    private List<RecipeModel>? recipesList;
-    private int selectedRecipeId;
-    private bool ShowingRecipe { get; set; } = false;
+    // do an if(ShowingRecipe) above and inside {ViewRecipe}
+    private List<RecipeModel>? recentRecipesList;
+    private List<RecipeModel>? searchedRecipesList;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            recipesList = await recipesService.GetRecentsAsync();
+            recentRecipesList = await recipesService.GetRecentsAsync();
         }
         catch (Exception ex)
         {
@@ -65,11 +44,8 @@ else
         }
     }
 
-    private async Task ShowRecipe(int recipeId)
+    private void HandleSearchCompleted(List<RecipeModel> recipes)
     {
-        selectedRecipeId = recipeId;
-        ShowingRecipe = !ShowingRecipe;
-        
-        await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
+        searchedRecipesList = recipes;
     }
 }

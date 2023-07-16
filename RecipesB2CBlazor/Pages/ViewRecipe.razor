@@ -1,19 +1,15 @@
-﻿@using Microsoft.Identity.Web
-@using RecipesB2CBlazor.Services;
-@inject IRecipesService recipesService
+﻿@inject IRecipesService recipesService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
-@if(recipe is null)
-{
-    <div class="text-xxl text-center">Loading...</div>
-}
-else if(recipe.Id == RecipeId)
-{
-    <div class="row">
+<div class="col" id="viewrecipe">
+    @if (recipe is null)
+    {
+        <div class="text-xxl text-center">Loading...</div>
+    }
+    else if (recipe.Id == RecipeId)
+    {
+
         <div class="text-xl text-center mt-5">@recipe.Name</div>
-    </div>
-    
-    <div class="row justify-content-center mt-5">
         <ul class="col-md-3 list-unstyled">
             @foreach (var i in FormatIngredients(recipe.Ingredients!))
             {
@@ -23,9 +19,9 @@ else if(recipe.Id == RecipeId)
         <div class="col-md-6 text-center">
             @recipe.Instructions
         </div>
-    </div>
+    }
+</div>
 
-}
 
 @code {
     private RecipeModel? recipe;
