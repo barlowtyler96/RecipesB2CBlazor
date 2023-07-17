@@ -4,21 +4,27 @@
 
 @if (RecipesList is null)
 {
-    <div class="text-xxl">Loading...</div>
+    <div class="row justify-content-center">
+        <div class="text-xxl">Loading...</div>
+    </div>
+    
 }
 else
 {
-    @foreach (var r in RecipesList)
-    {
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 my-3">
-            <div @onclick="(() => ShowRecipe(r.Id))"
-                 class="card custom-primary-color text-center border-1 shadow-lg px-1 mx-3 h-100 card-pop">
-                <div class="text-lg fw-bold pt-2">@r.Name</div>
-                <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
-                <p><em>@r.Description</em></p>
+    <div class="row justify-content-center">
+        @foreach (var r in RecipesList)
+        {
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 my-3">
+                <div @onclick="(() => ShowRecipe(r.Id))"
+                     class="card custom-primary-color text-center border-1 shadow-lg px-1 mx-3 h-100 card-pop">
+                    <div class="text-lg fw-bold pt-2">@r.Name</div>
+                    <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-4" alt="Dish Image">
+                    <p><em>@r.Description</em></p>
+                </div>
             </div>
-        </div>
-    }
+        }
+    </div>
+    
 
     @if (ShowingRecipe)
     {
@@ -28,6 +34,7 @@ else
         </div>
     }
 }
+
 
 @code {
     [Parameter]

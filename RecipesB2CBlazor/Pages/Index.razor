@@ -17,27 +17,9 @@
     </div>
 </div>
 
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="text-xxl fw-bold text-center m-5">Browse</div>
-        <Search SearchCompleted="HandleSearchCompleted" />
-    </div>
-</div>
-
-@if (searchedRecipesList is not null)
-{
-    <div class="row bg-custom-primary">
-        <RecipeCards RecipesList="@searchedRecipesList" />
-    </div>
-}
-
-<div class="row justify-content-center">
-    <Browse />
-</div>
-
 @code {
     private List<RecipeModel>? recentRecipesList;
-    private List<RecipeModel>? searchedRecipesList;
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,10 +31,5 @@
         {
             ConsentHandler.HandleException(ex);
         }
-    }
-
-    private void HandleSearchCompleted(List<RecipeModel> recipes)
-    {
-        searchedRecipesList = recipes;
     }
 }

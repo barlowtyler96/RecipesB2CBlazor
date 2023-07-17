@@ -1,24 +1,27 @@
 ﻿@inject IRecipesService recipesService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
-
-<div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Search keyword" aria-label="Search keyword" aria-describedby="search-button" @bind="@keyword">
-    <button class="btn btn-primary" type="button" id="search-button" @onclick="SearchForKeyword">Search</button>
+<div class="row">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search keyword" aria-label="Search keyword" aria-describedby="search-button" @bind="@keyword">
+        <button class="btn btn-primary" type="button" id="search-button" @onclick="SearchForKeyword">Search</button>
+    </div>
 </div>
+
+@if (returnedRecipes is not null)
+{
+    <RecipeCards RecipesList="@returnedRecipes" />
+}
+
 
 @code {
     private string keyword { get; set; }
     private List<RecipeModel>? returnedRecipes;
-
-    [Parameter]
-    public EventCallback<List<RecipeModel>> SearchCompleted { get; set; }
 
     private async Task SearchForKeyword()
     {
         try
         {
             returnedRecipes = await recipesService.GetByKeyword(keyword);
-            await SearchCompleted.InvokeAsync(returnedRecipes);
         }
         catch (Exception ex)
         {
