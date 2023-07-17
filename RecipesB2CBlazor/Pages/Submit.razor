@@ -8,45 +8,50 @@
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 <PageTitle>Submit</PageTitle>
 
-<h3>Submit</h3>
-
+<div class="container-fluid">
+    <div class="row">
+        <div class="text-xxl fw-bold text-center m-3">Submit</div>
+    </div>
+</div>
 
 
 <div class="container-fluid">
-    <EditForm Model=@recipe OnValidSubmit="SubmitRecipe">
-        <DataAnnotationsValidator />
-        <div class="form-group mb-3">
-            <label for="Name">Recipe Name</label>
-            <InputText @bind-Value=recipe.Name class="form-control" id="Name" />
-            <ValidationMessage For="@(() => recipe.Name)" />
-            <div class="form-text">Please capitalize the first letter of each word. (ex: Pepperoni Pizza)</div>
-        </div>
-        <div class="form-group mb-3">
-            <label for="Description">Recipe Description</label>
-            <InputText @bind-Value=recipe.Description class="form-control" id="Description" />
-            <ValidationMessage For="@(() => recipe.Description)" />
-            <div class="form-text">Please capitalize and use periods on a new sentence. Like this.</div>
-        </div>
-        <div class="form-group mb-3">
-            <label for="Ingredients">Recipe Ingredients</label>
-            <InputText @bind-Value=recipe.Ingredients class="form-control" id="Ingredients" />
-            <ValidationMessage For="@(() => recipe.Ingredients)" />
-            <div class="form-text">Please put a '-' between each ingredient. (ex: 1 cup flour - 1 egg).</div>
-        </div>
-        <div class="form-group mb-3">
-            <label for="Instructions">Recipe Instructions</label>
-            <InputText @bind-Value=recipe.Instructions class="form-control" id="Instructions" />
-            <ValidationMessage For="@(() => recipe.Instructions)" />
-            <div class="form-text">Please capitalize and use periods on a new sentence. Like this.</div>
-        </div>
-        <div class="form-group mb-3">
-            <label for="Instructions">Recipe ImagePath</label>
-            <InputText @bind-Value=recipe.ImagePath class="form-control" id="ImagePath" />
-            <ValidationMessage For="@(() => recipe.ImagePath)" />
-            <div class="form-text">Insert the corresponding image path.</div>
-        </div>
-        <input type="submit" class="btn btn-primary" value="Submit" />
-    </EditForm>
+    <div class="row">
+        <EditForm Model=@recipe OnValidSubmit="SubmitRecipe">
+            <DataAnnotationsValidator />
+            <div class="form-group mb-3">
+                <label for="Name">Recipe Name</label>
+                <InputText @bind-Value=recipe.Name class="form-control" id="Name" />
+                <ValidationMessage For="@(() => recipe.Name)" />
+                <div class="form-text">Please capitalize the first letter of each word. (ex: Pepperoni Pizza)</div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="Description">Recipe Description</label>
+                <InputText @bind-Value=recipe.Description class="form-control" id="Description" />
+                <ValidationMessage For="@(() => recipe.Description)" />
+                <div class="form-text">Please capitalize and use periods on a new sentence. Like this.</div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="Ingredients">Recipe Ingredients</label>
+                <InputText @bind-Value=recipe.Ingredients class="form-control" id="Ingredients" />
+                <ValidationMessage For="@(() => recipe.Ingredients)" />
+                <div class="form-text">Please put a '-' between each ingredient. (ex: 1 cup flour - 1 egg).</div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="Instructions">Recipe Instructions</label>
+                <InputText @bind-Value=recipe.Instructions class="form-control" id="Instructions" />
+                <ValidationMessage For="@(() => recipe.Instructions)" />
+                <div class="form-text">Please capitalize and use periods on a new sentence. Like this.</div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="Instructions">Recipe ImagePath</label>
+                <InputText @bind-Value=recipe.ImagePath class="form-control" id="ImagePath" />
+                <ValidationMessage For="@(() => recipe.ImagePath)" />
+                <div class="form-text">Insert the corresponding image path.</div>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Submit" />
+        </EditForm>
+    </div>
 </div>
 
 

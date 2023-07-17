@@ -3,22 +3,30 @@
 @page "/"
 
 <PageTitle>Tyler's Recipes</PageTitle>
-<div class="row">
-    <div class="text-xxl fw-bold text-center m-3">Welcome to Tyler's Recipes.</div>
-    <div class="text-lg fw-bold text-center m-3">Recently Added Recipes</div>
-</div>
-<div class="row justify-content-center">
-    <RecipeCards RecipesList="@recentRecipesList" />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="text-xxl fw-bold text-center m-3">Welcome to Tyler's Recipes.</div>
+        <div class="text-lg fw-bold text-center m-3">Recently Added Recipes</div>
+    </div>
 </div>
 
-<div class="row justify-content-center">
-    <div class="text-xxl fw-bold text-center m-5">Browse</div>
-    <Search SearchCompleted="HandleSearchCompleted" />
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <RecipeCards RecipesList="@recentRecipesList" />
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="text-xxl fw-bold text-center m-5">Browse</div>
+        <Search SearchCompleted="HandleSearchCompleted" />
+    </div>
 </div>
 
 @if (searchedRecipesList is not null)
 {
-    <div class="row">
+    <div class="row bg-custom-primary">
         <RecipeCards RecipesList="@searchedRecipesList" />
     </div>
 }
@@ -28,7 +36,6 @@
 </div>
 
 @code {
-    // do an if(ShowingRecipe) above and inside {ViewRecipe}
     private List<RecipeModel>? recentRecipesList;
     private List<RecipeModel>? searchedRecipesList;
 
