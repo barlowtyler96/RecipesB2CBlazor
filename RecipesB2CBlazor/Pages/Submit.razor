@@ -10,13 +10,9 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="text-xxl fw-bold text-center m-3">Submit</div>
-    </div>
-</div>
-
-
-<div class="container-fluid">
-    <div class="row">
+        <div class="row">
+            <div class="text-xxl fw-bold text-center m-3">Submit</div>
+        </div>
         <EditForm Model=@recipe OnValidSubmit="SubmitRecipe">
             <DataAnnotationsValidator />
             <div class="form-group mb-3">
@@ -53,8 +49,6 @@
         </EditForm>
     </div>
 </div>
-
-
 
 @code {
     private RecipeModel recipe = new();
