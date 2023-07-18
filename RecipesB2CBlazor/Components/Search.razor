@@ -1,9 +1,11 @@
 ﻿@inject IRecipesService recipesService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
-<div class="row">
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search keyword" aria-label="Search keyword" aria-describedby="search-button" @bind="@keyword">
-        <button class="btn btn-primary" type="button" id="search-button" @onclick="SearchForKeyword">Search</button>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-sm-12">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search keyword" aria-label="Search keyword" aria-describedby="search-button" @bind="@keyword">
+            <button class="btn btn-primary" type="button" id="search-button" @onclick="SearchForKeyword">Search</button>
+        </div>
     </div>
 </div>
 

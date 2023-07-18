@@ -1,15 +1,15 @@
 ﻿@inject IRecipesService recipesService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
-<div class="col" id="viewrecipe">
+<div class="row justify-content-center bg-custom-primary rounded-3 mt-5" id="viewrecipe">
+
     @if (recipe is null)
     {
         <div class="text-xxl text-center">Loading...</div>
     }
     else if (recipe.Id == RecipeId)
     {
-
-        <div class="text-xl text-center mt-5">@recipe.Name</div>
+        <div class="text-xl text-center m-5">@recipe.Name</div>
         <ul class="col-md-3 list-unstyled">
             @foreach (var i in FormatIngredients(recipe.Ingredients!))
             {
