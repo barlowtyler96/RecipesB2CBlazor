@@ -28,7 +28,7 @@ else
     @if (ShowingRecipe)
     {
         <ViewRecipe RecipeId="@SelectedRecipeId" />
-        <div class="d-flex justify-content-center">
+        <div class="d-flex mb-5 justify-content-center">
             <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 my-3">Hide</button>
         </div>
     }
