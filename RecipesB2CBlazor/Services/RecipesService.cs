@@ -1,7 +1,6 @@
 ﻿using Microsoft.Identity.Web;
 using Newtonsoft.Json;
 using RecipesB2CBlazor.Models;
-using System.Collections;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
