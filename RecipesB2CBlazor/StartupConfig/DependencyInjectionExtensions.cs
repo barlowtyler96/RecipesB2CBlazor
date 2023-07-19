@@ -16,20 +16,12 @@ public static class DependencyInjectionExtensions
 
     public static void AddAuthServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration, "AzureAdB2C")
+        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"))
             .EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["DownstreamApi:Scopes"] })
             .AddInMemoryTokenCaches();
 
-        builder.Services.AddHttpContextAccessor();
 
-        builder.Services.AddControllersWithViews(options =>
-        {
-            var policy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-            options.Filters.Add(new AuthorizeFilter(policy));
-        }).AddMicrosoftIdentityUI();
-
-        builder.Services.Configure<OpenIdConnectOptions>(builder.Configuration.GetSection("AzureAdB2C"));
+        builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
     }
 }
