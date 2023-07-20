@@ -17,25 +17,25 @@ public static class RecipesServiceExtensions
 }
 public class RecipesService : IRecipesService
 {
-    private readonly IHttpContextAccessor _contextAccessor;
     private readonly HttpClient _httpClient;
     private readonly string _recipesScope = string.Empty;
     private readonly string _recipesBaseAddress = string.Empty;
+    private readonly string _recipesTenantId = string.Empty;
     private readonly ITokenAcquisition _tokenAcquisition;
 
     public RecipesService(ITokenAcquisition tokenAcquisition, HttpClient httpClient,
-        IConfiguration configuration, IHttpContextAccessor contextAccessor)
+        IConfiguration configuration)
     {
         _httpClient = httpClient;
         _tokenAcquisition = tokenAcquisition;
-        _contextAccessor = contextAccessor;
         _recipesScope = configuration["DownstreamApi:Scopes"];
+        _recipesTenantId = configuration["AzureAd:TenantId"];
         _recipesBaseAddress = configuration["DownstreamApi:BaseUrl"];
     }
 
     public async Task<RecipeModel> AddAsync(RecipeModel recipeModel)
     {
-        await PrepareAuthenticatedClient();
+        await PrepareAuthenticatedClientForUser();
 
         var jsonRequest = JsonConvert.SerializeObject(recipeModel);
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
@@ -54,7 +54,7 @@ public class RecipesService : IRecipesService
 
     public async Task DeleteAsync(int id)
     {
-        await PrepareAuthenticatedClient();
+        await PrepareAuthenticatedClientForApp();
 
         var response = await this._httpClient.DeleteAsync($"{_recipesBaseAddress}Recipes/{id}");
 
@@ -67,7 +67,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeModel> EditAsync(RecipeModel recipeModel)
     {
-        await PrepareAuthenticatedClient();
+        await PrepareAuthenticatedClientForUser();
 
         var jsonRequest = JsonConvert.SerializeObject(recipeModel);
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
@@ -87,7 +87,7 @@ public class RecipesService : IRecipesService
 
     public async Task<List<RecipeModel>> GetAllAsync()
     {
-        await PrepareAuthenticatedClient();
+        await PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes");
 
@@ -103,7 +103,7 @@ public class RecipesService : IRecipesService
 
     public async Task<List<RecipeModel>> GetRecentsAsync()
     {
-        await PrepareAuthenticatedClient();
+        await PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/recent");
 
@@ -119,7 +119,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeModel> GetAsync(int id)
     {
-        await PrepareAuthenticatedClient();
+        await PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/id/{id}");
 
@@ -135,7 +135,7 @@ public class RecipesService : IRecipesService
 
     public async Task<List<RecipeModel>> GetByKeyword(string keyword)
     {
-        await PrepareAuthenticatedClient();
+        await PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/keyword/{keyword}");
 
@@ -149,7 +149,15 @@ public class RecipesService : IRecipesService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
 
-    private async Task PrepareAuthenticatedClient()
+    private async Task PrepareAuthenticatedClientForApp()
+    {
+        var accessToken = await _tokenAcquisition.GetAccessTokenForAppAsync(_recipesScope, tenant: _recipesTenantId);
+        Debug.WriteLine($"access token - {accessToken}");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    }
+
+    private async Task PrepareAuthenticatedClientForUser()
     {
         var accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { _recipesScope });
         Debug.WriteLine($"access token - {accessToken}");
