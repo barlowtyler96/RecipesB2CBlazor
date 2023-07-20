@@ -21,7 +21,6 @@ public static class DependencyInjectionExtensions
             .EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["DownstreamApi:Scopes"] })
             .AddInMemoryTokenCaches();
 
-
         builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
     }
 }
