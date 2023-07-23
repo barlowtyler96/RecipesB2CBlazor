@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Web;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 using Newtonsoft.Json;
 using RecipesB2CBlazor.Models;
 using System.Diagnostics;
@@ -35,7 +36,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeModel> AddAsync(RecipeModel recipeModel)
     {
-        await PrepareAuthenticatedClientForUser();
+        await PrepareAuthenticatedClientForApp();
 
         var jsonRequest = JsonConvert.SerializeObject(recipeModel);
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
@@ -67,7 +68,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeModel> EditAsync(RecipeModel recipeModel)
     {
-        await PrepareAuthenticatedClientForUser();
+        await PrepareAuthenticatedClientForApp();
 
         var jsonRequest = JsonConvert.SerializeObject(recipeModel);
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
@@ -151,15 +152,7 @@ public class RecipesService : IRecipesService
 
     private async Task PrepareAuthenticatedClientForApp()
     {
-        var accessToken = await _tokenAcquisition.GetAccessTokenForAppAsync(_recipesScope, tenant: _recipesTenantId);
-        Debug.WriteLine($"access token - {accessToken}");
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    }
-
-    private async Task PrepareAuthenticatedClientForUser()
-    {
-        var accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { _recipesScope });
+        var accessToken = await _tokenAcquisition.GetAccessTokenForAppAsync(_recipesScope, JwtBearerDefaults.AuthenticationScheme, tenant: _recipesTenantId);
         Debug.WriteLine($"access token - {accessToken}");
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
