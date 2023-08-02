@@ -1,0 +1,36 @@
+﻿<div>
+    <button disabled="@IsFirstPage" @onclick="GoToFirstPage">First</button>
+    <button disabled="@IsFirstPage" @onclick="GoToPreviousPage">Previous</button>
+    <span>Page @CurrentPage of @TotalPages</span>
+    <button disabled="@IsLastPage" @onclick="GoToNextPage">Next</button>
+    <button disabled="@IsLastPage" @onclick="GoToLastPage">Last</button>
+</div>
+<div> 
+    <span>Total Results: @TotalItems</span>
+</div>
+
+@code {
+    [Parameter] public int CurrentPage { get; set; }
+    [Parameter] public int TotalItems { get; set; }
+    [Parameter] public int ItemsPerPage { get; set; }
+    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+
+    private bool IsFirstPage => CurrentPage == 1;
+    private bool IsLastPage => CurrentPage == TotalPages;
+
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / ItemsPerPage);
+
+    private async Task GoToFirstPage() => await GoToPage(1);
+    private async Task GoToPreviousPage() => await GoToPage(CurrentPage - 1);
+    private async Task GoToNextPage() => await GoToPage(CurrentPage + 1);
+    private async Task GoToLastPage() => await GoToPage(TotalPages);
+
+    private async Task GoToPage(int pageNumber)
+    {
+        if (pageNumber >= 1 && pageNumber <= TotalPages)
+        {
+            CurrentPage = pageNumber;
+            await OnPageChanged.InvokeAsync(CurrentPage);
+        }
+    }
+}
