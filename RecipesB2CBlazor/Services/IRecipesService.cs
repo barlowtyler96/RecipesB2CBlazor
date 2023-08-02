@@ -1,4 +1,5 @@
-﻿using RecipesB2CBlazor.Models;
+﻿using RecipesB2CBlazor.Helpers;
+using RecipesB2CBlazor.Models;
 
 namespace RecipesB2CBlazor.Services
 {
@@ -9,7 +10,7 @@ namespace RecipesB2CBlazor.Services
         Task<RecipeModel> EditAsync(RecipeModel recipeModel);
         Task<List<RecipeModel>> GetAllAsync();
         Task<RecipeModel> GetAsync(int id);
-        Task<List<RecipeModel>> GetByKeyword(string keyword);
+        Task<RecipesResponse> GetByKeyword(string keyword, int currentPageNumber, int pageSize);
         Task<List<RecipeModel>> GetRecentsAsync();
     }
 }
