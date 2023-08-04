@@ -1,5 +1,9 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.jumbotron-bg-img{
+    background-image: url(/RecipeImages/jumbotron-bg-img.jpg);
+    height: 225px;
+}
 .card-pop {
     transition: transform 0.3s ease;
 }
@@ -11,10 +15,10 @@
     height: auto;
 }
 .bg-custom-primary {
-    background-color: #CFF9F2;
+    background-color: #DBFFD7;
 }
 .custom-primary-color {
-    background-color: #CFF9F2;
+    background-color: #DBFFD7;
 }
 .text-xxl{
     font-size: 50px;

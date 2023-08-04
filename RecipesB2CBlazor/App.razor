@@ -1,7 +1,21 @@
 ﻿<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
+                <NotAuthorized>
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            <div class="text-xl text-center text-danger">
+                                You are not authorized to view this page. You must sign in or create an account to submit a recipe for review!
+                            </div>
+                            <div class="text-xl text-center">
+                                <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </NotAuthorized>
+            </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>

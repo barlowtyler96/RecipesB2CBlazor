@@ -9,11 +9,13 @@
     }
     else if (recipe.Id == RecipeId)
     {
-        <div class="text-xl text-center m-5">@recipe.Name</div>
+        <div class="text-xl fw-bold text-center m-5">@recipe.Name</div>
         <ul class="col-md-3 list-unstyled">
             @foreach (var i in FormatIngredients(recipe.Ingredients!))
             {
-                <li>@i</li>
+                <li class="small">
+                    <i class="fa-solid fa-bullseye"></i> @i
+                </li>
             }
         </ul>
         <div class="col-md-6 text-center">

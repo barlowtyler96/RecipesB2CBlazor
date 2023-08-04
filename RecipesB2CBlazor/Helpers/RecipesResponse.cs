@@ -10,5 +10,5 @@ public class RecipesResponse
 
     public int CurrentPageNumber { get; set; } = 1;
 
-    public List<RecipeModel> Data { get; set; }
+    public List<RecipeModel>? Data { get; set; }
 }
