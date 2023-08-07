@@ -22,6 +22,7 @@
 * Web API consumption
 
 ![](ReadMeImages/readme1.PNG)
+![](ReadMeImages/readme2.PNG)
 
 
 
