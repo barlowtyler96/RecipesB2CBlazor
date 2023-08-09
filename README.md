@@ -21,10 +21,8 @@
 * Server-Side paging for pagination component
 * Web API consumption
 
-<video width="320" height="240" controls>
-  <source src="ReadMeVideo/recipes-blazor-sample.mp4" type="mp4">
-  Your browser does not support the video tag.
-</video>
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=dlsZ7XV1Vsk" frameborder="0" allowfullscreen></iframe>
+
 
 
 
