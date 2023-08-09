@@ -21,13 +21,10 @@
 * Server-Side paging for pagination component
 * Web API consumption
 
-![](ReadMeImages/readme1.PNG)
-
-
-![](ReadMeImages/readme2.PNG)
-
-
-![](ReadMeImages/readme3.PNG)
+<video width="320" height="240" controls>
+  <source src="" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 
 
