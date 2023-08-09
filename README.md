@@ -21,7 +21,7 @@
 * Server-Side paging for pagination component
 * Web API consumption
 
-<iframe width="560" height="315" src="[https://www.youtube.com/watch?v=dlsZ7XV1Vsk](https://www.youtube.com/watch?v=dlsZ7XV1Vsk)" frameborder="0" allowfullscreen></iframe>
+[![Sample Video](https://img.youtube.com/vi/dlsZ7XV1Vsk/0.jpg)](https://www.youtube.com/watch?v=dlsZ7XV1Vsk)
 
 
 
