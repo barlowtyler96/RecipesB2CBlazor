@@ -10,6 +10,7 @@
 * OAuth 2.0
 * OpenID Connect
 * Razor Components
+* Razor Syntax
 * Minimal vanilla Javascript
 
 ## Features: 
