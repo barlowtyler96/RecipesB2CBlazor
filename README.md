@@ -10,6 +10,7 @@
 * OAuth 2.0
 * OpenID Connect
 * Razor Components
+* Razor Syntax
 * Minimal vanilla Javascript
 
 ## Features: 
@@ -21,10 +22,9 @@
 * Server-Side paging for pagination component
 * Web API consumption
 
-<video width="320" height="240" controls>
-  <source src="ReadMeVideo/recipes-blazor-sample.mp4" type="mp4">
-  Your browser does not support the video tag.
-</video>
+## Sample Video: 
+[![Sample Video](https://img.youtube.com/vi/dlsZ7XV1Vsk/0.jpg)](https://www.youtube.com/watch?v=dlsZ7XV1Vsk)
+
 
 
 
