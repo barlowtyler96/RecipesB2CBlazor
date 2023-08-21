@@ -11,7 +11,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="row">
+        <div class="col-12">
             <div class="text-xxl fw-bold text-center m-3">Submit</div>
         </div>
         <EditForm Model=@recipe OnValidSubmit="SubmitRecipe">
@@ -49,21 +49,34 @@
             <input type="submit" class="btn btn-primary" value="Submit" />
         </EditForm>
     </div>
+    <div class="row mt-2">
+        @if (createdRecipe is not null && hasSubmitted == true)
+        {
+            <div class="alert alert-success">Your recipe was submitted.</div>
+        }
+        else if (createdRecipe is null && hasSubmitted == true)
+        {
+            <div class="alert alert-danger">There was an error.</div>
+        }
+    </div>
+    
 </div>
 
 @code {
     private RecipeModel recipe = new();
+    private RecipeModel? createdRecipe;
+    private bool hasSubmitted = false;
 
     private async void SubmitRecipe()
     {
         try
         {
-            await recipesService.AddAsync(recipe);
-            // new up recipe here?
+            createdRecipe = await recipesService.AddAsync(recipe);
+            hasSubmitted = true;
+            StateHasChanged();
         }
         catch (Exception ex)
         {
-
             ConsentHandler.HandleException(ex);
         }
     }
