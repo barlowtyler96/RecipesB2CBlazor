@@ -22,7 +22,6 @@ public class RecipeModel
     [MaxLength(1000)]
     public string? Instructions { get; set; }
 
-    [Required]
     [MaxLength(200)]
     public string? ImagePath { get; set; }
 }
