@@ -41,14 +41,14 @@
                 <div class="form-text">Please capitalize and use periods on a new sentence. Like this.</div>
             </div>
             <div class="form-group mb-3">
-                <label for="Instructions">Recipe ImagePath</label>
-                <InputText @bind-Value=recipe.ImagePath class="form-control" id="ImagePath" />
-                <ValidationMessage For="@(() => recipe.ImagePath)" />
-                <div class="form-text">Insert the corresponding image path.</div>
+                <label for="Image">Recipe Image (Optional)</label>
+                <InputFile OnChange="HandleFileChange" class="form-control" />
+                <div class="form-text">Upload an image for the recipe (optional).</div>
             </div>
             <input type="submit" class="btn btn-primary" value="Submit" />
         </EditForm>
     </div>
+
     <div class="row mt-2">
         @if (createdRecipe is not null && hasSubmitted == true)
         {
@@ -59,7 +59,6 @@
             <div class="alert alert-danger">There was an error.</div>
         }
     </div>
-    
 </div>
 
 @code {
@@ -67,10 +66,11 @@
     private RecipeModel? createdRecipe;
     private bool hasSubmitted = false;
 
-    private async void SubmitRecipe()
+    private async Task SubmitRecipe()
     {
         try
         {
+            hasSubmitted = false; // Clear previous submission status
             createdRecipe = await recipesService.AddAsync(recipe);
             hasSubmitted = true;
             StateHasChanged();
@@ -78,6 +78,25 @@
         catch (Exception ex)
         {
             ConsentHandler.HandleException(ex);
+        }
+    }
+
+    private async Task HandleFileChange(InputFileChangeEventArgs e)
+    {
+        var imageFile = e.File;
+
+        if (imageFile != null)
+        {
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.Name);
+
+            string relativeImagePath = $"RecipeImages/DishImages/{fileName}";
+            recipe.ImagePath = relativeImagePath;
+            string absoluteImagePath = Path.Combine("wwwroot", relativeImagePath);
+
+            using (var stream = new FileStream(absoluteImagePath, FileMode.Create))
+            {
+                await imageFile.OpenReadStream().CopyToAsync(stream);
+            }
         }
     }
 }
