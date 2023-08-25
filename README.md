@@ -22,8 +22,11 @@
 * Server-Side paging for pagination component
 * Web API consumption
 
+## Database Schema
+![](ReadMeImages/Recipe-Db-Schema.PNG)
+
 ## Sample Video: 
-[![Sample Video](https://img.youtube.com/vi/dlsZ7XV1Vsk/0.jpg)](https://www.youtube.com/watch?v=dlsZ7XV1Vsk)
+[![Sample Video](https://img.youtube.com/vi/uoZnfllinzE/0.jpg)](https://www.youtube.com/watch?v=uoZnfllinzE)
 
 
 
