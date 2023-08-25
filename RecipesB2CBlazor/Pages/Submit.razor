@@ -8,62 +8,73 @@
 @inject ITokenAcquisition tokenAqcuisition
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 <PageTitle>Submit</PageTitle>
+<div class="container-fluid">
+    <h3>Submit a Recipe</h3>
 
-<h3>Add Recipe</h3>
-
-<EditForm Model="recipeDto" OnValidSubmit="SubmitRecipe">
-    <DataAnnotationsValidator />
-    <div class="">
-        <label>Recipe Name:</label>
-        <InputText @bind-Value="recipeDto.Name" class="form-control" />
-        <ValidationMessage For="@(() => recipeDto.Name)" />
-    </div>
-    <div class="">
-        <label>Recipe Description:</label>
-        <InputText @bind-Value="recipeDto.Description" class="form-control" />
-        <ValidationMessage For="@(() => recipeDto.Description)" />
-    </div>
-    <div class="">
-        <label>Recipe Instructions:</label>
-        <InputText @bind-Value="recipeDto.Instructions" class="form-control" />
-        <ValidationMessage For="@(() => recipeDto.Instructions)" />
-    </div>
-
-
-    <h4>Recipe Ingredients</h4>
-    @foreach (var recipeIngredient in recipeDto.RecipeIngredients)
-    {
-        <div class="recipeIngredient">
-            <div class="">
-                <label>Amount:</label>
-                <InputNumber @bind-Value="recipeIngredient.Amount" class="form-control" />
+    <EditForm Model="recipeDto" OnValidSubmit="SubmitRecipe">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col-md-3">
+                <label>Recipe Name:</label>
+                <InputText @bind-Value="recipeDto.Name" class="form-control" />
+                <ValidationMessage For="@(() => recipeDto.Name)" />
+            </div>
+            <div class="col-md-9">
+                <label>Recipe Description:</label>
+                <InputText @bind-Value="recipeDto.Description" class="form-control" />
+                <ValidationMessage For="@(() => recipeDto.Description)" />
             </div>
             <div class="">
-                <label>Unit:</label>
-                <InputText @bind-Value="recipeIngredient.Unit" class="form-control" />
+                <label>Recipe Instructions:</label>
+                <InputText @bind-Value="recipeDto.Instructions" class="form-control" />
+                <ValidationMessage For="@(() => recipeDto.Instructions)" />
             </div>
             <div class="">
-                <label>Ingredient:</label>
-                <InputText @bind-Value="recipeIngredient.IngredientName" class="form-control" />
+                <labe>Recipe Image (Optional)</labe>
+                <InputFile OnChange="HandleFileChange" class="form-control" />
+                <div class="form-text">Upload an image for the recipe (optional).</div>
             </div>
         </div>
-    }
+        
 
-    <button type="button" class="btn btn-success" @onclick="AddRecipeIngredient">Add Recipe Ingredient</button>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-</EditForm>
+        <h4>Recipe Ingredients</h4>
+        <div class="row">
+            @foreach (var recipeIngredient in recipeDto.RecipeIngredients)
+            {
+                <div class="col-md-4">
+                    <label>Amount:</label>
+                    <InputNumber @bind-Value="recipeIngredient.Amount" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label>Unit:</label>
+                    <InputText @bind-Value="recipeIngredient.Unit" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label>Ingredient:</label>
+                    <InputText @bind-Value="recipeIngredient.IngredientName" class="form-control" />
+                </div>
+            }
+        </div>
+        
 
-<div class="row mt-2">
-    @if (createdRecipe is not null && hasSubmitted == true)
-    {
-        <div class="alert alert-success">Your recipe was submitted.</div>
-    }
-    else if (createdRecipe is null && hasSubmitted == true)
-    {
-        <div class="alert alert-danger">There was an error.</div>
-    }
+        <button type="button" class="btn btn-success" @onclick="AddRecipeIngredient">Add Recipe Ingredient</button>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+
+    <div class="row mt-2">
+        @if (createdRecipe is not null && hasSubmitted == true)
+        {
+            <div class="alert alert-success">Your recipe was submitted. It will be reviewed before being added to the site.</div>
+        }
+        else if (createdRecipe is null && hasSubmitted == true)
+        {
+            <div class="alert alert-danger">There was an error. If the issue persists, please email support at tybardesigns@gmail.com</div>
+        }
+    </div>
 </div>
+
 
 
 
