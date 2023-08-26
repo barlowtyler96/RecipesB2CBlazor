@@ -5,12 +5,12 @@ namespace RecipesB2CBlazor.Services
 {
     public interface IRecipesService
     {
-        Task<RecipeModel> AddAsync(RecipeModel recipeModel);
+        Task<RecipeDto> AddAsync(RecipeDto recipeDto);
         Task DeleteAsync(int id);
         Task<RecipeModel> EditAsync(RecipeModel recipeModel);
         Task<List<RecipeModel>> GetAllAsync();
-        Task<RecipeModel> GetAsync(int id);
+        Task<RecipeDto> GetAsync(int id);
         Task<RecipesResponse> GetByKeyword(string keyword, int currentPageNumber, int pageSize);
-        Task<List<RecipeModel>> GetRecentsAsync();
+        Task<List<RecipeDto>> GetRecentsAsync();
     }
 }
