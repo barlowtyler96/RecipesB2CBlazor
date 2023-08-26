@@ -11,11 +11,11 @@ public class RecipeModel
     public string? Name { get; set; }
 
     [Required]
-    [MaxLength(1000)]
+    [MaxLength(2000)]
     public string? Description { get; set; }
 
     [Required]
-    [MaxLength(1000)]
+    [MaxLength(2000)]
     public string? Ingredients { get; set; }
 
     [Required]
