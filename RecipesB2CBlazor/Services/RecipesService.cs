@@ -35,11 +35,12 @@ public class RecipesService : IRecipesService
         _recipesBaseAddress = configuration["DownstreamApi:BaseUrl"];
     }
 
-    public async Task<RecipeModel> AddAsync(RecipeModel recipeModel)
+    public async Task<RecipeDto> AddAsync(RecipeDto recipeDto)
     {
         await PrepareAuthenticatedClientForApp();
 
-        var jsonRequest = JsonConvert.SerializeObject(recipeModel);
+        var jsonRequest = JsonConvert.SerializeObject(recipeDto); //put both these into 
+
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
         var response = await this._httpClient.PostAsync($"{_recipesBaseAddress}Administrator", jsonContent);
@@ -47,9 +48,9 @@ public class RecipesService : IRecipesService
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var content = await response.Content.ReadAsStringAsync();
-            recipeModel = JsonConvert.DeserializeObject<RecipeModel>(content);
+            recipeDto = JsonConvert.DeserializeObject<RecipeDto>(content);
 
-            return recipeModel;
+            return recipeDto;
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}.");
     }
@@ -103,7 +104,7 @@ public class RecipesService : IRecipesService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
 
-    public async Task<List<RecipeModel>> GetRecentsAsync()
+    public async Task<List<RecipeDto>> GetRecentsAsync()
     {
         await PrepareAuthenticatedClientForApp();
 
@@ -112,14 +113,14 @@ public class RecipesService : IRecipesService
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var content = await response.Content.ReadAsStringAsync();
-            IEnumerable<RecipeModel> recipeList = JsonConvert.DeserializeObject<IEnumerable<RecipeModel>>(content);
+            IEnumerable<RecipeDto> recipeDtoList = JsonConvert.DeserializeObject<IEnumerable<RecipeDto>>(content);
 
-            return recipeList.ToList();
+            return recipeDtoList.ToList();
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
 
-    public async Task<RecipeModel> GetAsync(int id)
+    public async Task<RecipeDto> GetAsync(int id)
     {
         await PrepareAuthenticatedClientForApp();
 
@@ -128,9 +129,9 @@ public class RecipesService : IRecipesService
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var content = await response.Content.ReadAsStringAsync();
-            RecipeModel recipe = JsonConvert.DeserializeObject<RecipeModel>(content);
+            var recipes = JsonConvert.DeserializeObject<IEnumerable<RecipeDto>>(content);
 
-            return recipe;
+            return recipes.FirstOrDefault();
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
