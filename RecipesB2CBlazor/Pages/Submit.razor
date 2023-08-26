@@ -8,8 +8,16 @@
 @inject ITokenAcquisition tokenAqcuisition
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 <PageTitle>Submit</PageTitle>
-<div class="container-fluid">
-    <h3>Submit a Recipe</h3>
+<div class="container-fluid jumbotron-bg-img">
+    <div class="row align-items-center h-100 text-center">
+        <div class="col-6 mx-auto">
+            <div class="card h-100 justify-content-center">
+                <h1 class="fw-bold text-center m-3">
+                    Submit a Recipe 
+                </h1>
+            </div>
+        </div>
+    </div>
 
     <EditForm Model="recipeDto" OnValidSubmit="SubmitRecipe">
         <DataAnnotationsValidator />
@@ -35,8 +43,6 @@
                 <div class="form-text">Upload an image for the recipe (optional).</div>
             </div>
         </div>
-        
-
 
         <h4>Recipe Ingredients</h4>
         <div class="row">
@@ -58,7 +64,7 @@
         </div>
         
 
-        <button type="button" class="btn btn-success" @onclick="AddRecipeIngredient">Add Recipe Ingredient</button>
+        <button type="button" class="btn btn-success" @onclick="AddRecipeIngredient"><i class="fa-solid fa-plus"></i> Add an Ingredient</button>
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
