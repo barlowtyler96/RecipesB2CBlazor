@@ -11,12 +11,7 @@
     {
         <div class="text-xl fw-bold text-center m-5">@recipe.Name</div>
         <ul class="col-md-3 list-unstyled">
-            @foreach (var i in FormatIngredients(recipe.Ingredients!))
-            {
-                <li class="small">
-                    <i class="fa-solid fa-bullseye"></i> @i
-                </li>
-            }
+            
         </ul>
         <div class="col-md-6 text-center">
             @recipe.Instructions
@@ -25,7 +20,7 @@
 </div>
 
 @code {
-    private RecipeModel? recipe;
+    private RecipeDto? recipe;
     [Parameter]
     public int RecipeId { get; set; }
 
@@ -39,11 +34,5 @@
         {
             ConsentHandler.HandleException(ex);
         }
-    }
-
-    private string[] FormatIngredients(string ingredients)
-    {
-        var formattedIngredients = ingredients.Split('-');
-        return formattedIngredients;
     }
 }
