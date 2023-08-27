@@ -15,11 +15,11 @@ else
         @foreach (var r in RecipesList)
         {
             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 my-3">
-                <div @onclick="(() => ShowRecipe(r.Id))"
+                <div @onclick="(() => ShowRecipe(r.RecipeId))"
                      class="card custom-primary-color text-center border-2 border-dark shadow-lg px-1 mx-3 h-100 card-pop">
                     <div class=" fw-bold pt-2">@r.Name</div>
-                    <img src="@r.ImagePath" class="resized-image mx-auto d-block rounded-3 my-2" alt="Dish Image">
-                    <p class="small"><em>@r.Description</em></p>
+                    <img src="@r.ImagePath" class="card-sized-image mx-auto d-block rounded-3 my-2" alt="Dish Image">
+                    <p class="small">@r.Description</p>
                 </div>
             </div>
         }
