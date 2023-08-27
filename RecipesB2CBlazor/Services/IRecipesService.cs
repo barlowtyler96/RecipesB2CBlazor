@@ -5,7 +5,7 @@ namespace RecipesB2CBlazor.Services
 {
     public interface IRecipesService
     {
-        Task<RecipeDto> AddAsync(RecipeDto recipeDto);
+        Task<bool> AddAsync(RecipeDto recipeDto);
         Task DeleteAsync(int id);
         Task<RecipeModel> EditAsync(RecipeModel recipeModel);
         Task<List<RecipeModel>> GetAllAsync();
