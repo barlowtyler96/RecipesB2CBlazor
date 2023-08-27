@@ -70,11 +70,11 @@
     </EditForm>
 
     <div class="row mt-2">
-        @if (createdRecipe is not null && hasSubmitted == true)
+        @if (isSuccessStatusCode && hasSubmitted == true)
         {
             <div class="alert alert-success">Your recipe was submitted. It will be reviewed before being added to the site.</div>
         }
-        else if (createdRecipe is null && hasSubmitted == true)
+        else if (!isSuccessStatusCode && hasSubmitted == true)
         {
             <div class="alert alert-danger">There was an error. If the issue persists, please email support at tybardesigns@gmail.com</div>
         }
@@ -86,7 +86,7 @@
 
 @code {
     private RecipeDto recipeDto = new RecipeDto();
-    private RecipeDto? createdRecipe;
+    private bool isSuccessStatusCode;
     private bool hasSubmitted = false;
 
     private async Task SubmitRecipe()
@@ -94,7 +94,7 @@
         try
         {
             hasSubmitted = false; // Clear previous submission status
-            createdRecipe = await recipesService.AddAsync(recipeDto);
+            isSuccessStatusCode = await recipesService.AddAsync(recipeDto);
             hasSubmitted = true;
             StateHasChanged();
         }
