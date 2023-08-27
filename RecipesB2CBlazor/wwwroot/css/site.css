@@ -1,5 +1,13 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.ingredient-display {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 0px );
+    -webkit-backdrop-filter: blur( 0px );
+    border-radius: 10px;
+    border: 3px solid rgba( 255, 255, 255, 0.18 );
+}
 .jumbotron-bg-img{
     background-image: url(/RecipeImages/jumbotron-bg-img.jpg);
     height: 225px;
@@ -10,8 +18,12 @@
 .card-pop:hover {
     transform: scale(1.05);
 }
-.resized-image {
+.card-sized-image {
     width: 40%;
+    height: auto;
+}
+.full-sized-image {
+    width: 30%;
     height: auto;
 }
 .bg-custom-primary {
