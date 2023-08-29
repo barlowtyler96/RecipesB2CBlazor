@@ -18,9 +18,11 @@
 * User account editing
 * User password resetting
 * Page-specific Authorization
-* Ability for users with an account to submit recipes
-* Server-Side paging for pagination component
 * Web API consumption
+* Ability for users with an account to submit recipes
+* Ability for users to favorite recipes
+* Server-Side paging for pagination component
+
 
 ## Database Schema
 ![](ReadMeImages/Recipe-Db-Schema.PNG)
