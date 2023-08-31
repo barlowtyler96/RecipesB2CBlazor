@@ -1,5 +1,8 @@
-﻿@inject IRecipesService recipesService
+﻿@inject IRecipesService _recipesService
+@inject IUsersService _usersService
 @inject IJSRuntime JSRuntime
+@inject IHttpContextAccessor _httpContextAccessor
+@inject AuthenticationStateProvider _authenticationStateProvider
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 @if (RecipesList is null)
@@ -14,12 +17,26 @@ else
     <div class="row justify-content-center pb-2">
         @foreach (var r in RecipesList)
         {
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 my-3">
-                <div @onclick="(() => ShowRecipe(r.RecipeId))"
-                     class="card custom-primary-color text-center border-2 border-dark shadow-lg px-1 mx-3 h-100 card-pop">
-                    <div class=" fw-bold pt-2">@r.Name</div>
-                    <img src="@r.ImagePath" class="card-sized-image mx-auto d-block rounded-3 my-2" alt="Dish Image">
-                    <p class="small">@r.Description</p>
+            <div class="col-sm-12 col-md-3 my-3 d-flex align-items-stretch justify-content-sm-center">
+                <div class="card border-1 border-dark" style="width: 25rem;">
+                    <img src="@r.ImagePath" class="card-img-top card-sized-image" alt="Dish Image">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">@r.Name</h5>
+                        <p class="text-sm card-text">@r.Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-outline-danger">View Full Recipe</button>
+                        <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn btn-outline-danger">
+                            @if (r.IsFavorite)
+                            {
+                                <span><i class="fa-solid fa-heart" style="color: #ff0000;"></i></span>
+                            }
+                            else
+                            {
+                                <i class="fa-regular fa-heart fa-lg" style="color: #ff0000;"></i>
+                            }
+                        </button>
+                    </div>
                 </div>
             </div>
         }
@@ -29,7 +46,7 @@ else
     {
         <ViewRecipe RecipeId="@SelectedRecipeId" />
         <div class="d-flex mb-5 justify-content-center">
-            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 my-3">Hide</button>
+            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 my-3 shadow-lg">Hide</button>
         </div>
     }
 }
@@ -39,13 +56,43 @@ else
     public List<RecipeDto>? RecipesList { get; set; }
     private int SelectedRecipeId { get; set; }
     private bool ShowingRecipe { get; set; } = false;
+    private bool IsAuthenticated => _authenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated;
 
     private async Task ShowRecipe(int recipeId)
     {
         SelectedRecipeId = recipeId;
         ShowingRecipe = !ShowingRecipe;
 
-        await Task.Delay(100);
+        await Task.Delay(50);
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
+    }
+
+    private async Task ToggleFavoriteRecipe(int recipeId, bool isFavorite)
+    {
+
+        var recipe = RecipesList.FirstOrDefault(r => r.RecipeId == recipeId);
+
+        if (recipe != null)
+        {
+            try
+            {
+                if (!isFavorite)
+                {
+                    await _usersService.AddUserFavoriteAsync(recipeId);
+                    recipe.IsFavorite = true;
+                }
+                else
+                {
+                    await _usersService.DeleteUserFavoriteAsync(recipeId);
+                    recipe.IsFavorite = false;
+                }
+
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                ConsentHandler.HandleException(ex);
+            }
+        }
     }
 }
