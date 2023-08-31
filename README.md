@@ -1,6 +1,6 @@
 # Recipes Blazor App
 
-#### This is a project I created to practice authentication/authorization, front end design, as well as consuming APIs. The app is granted an access token from an Azure AD authentication endpoint using a shared secret and then calls my api for recipe data. Along with this client credentials flow, I used Azure AD B2C to allow users to create an account and sign in. It also allows users to edit their profile and reset their password.  If a user creates an account, they can submit a recipe for review before being added to the site. 
+#### This is a project I created to practice authentication/authorization, front end design, as well as consuming APIs. I used Azure AD B2C to allow users to create an account and sign in. It also allows users to edit their profile and reset their password. If a user creates an account, they can submit a recipe for review before being added to the site. Users also has the ability to favorite recipes. 
 
 #### I used Microsoft's documentation & code examples, Stack Overflow, and ChatGPT to complete the project. The biggest challenge I faced was learning how to implement Azures auth systems.
 
@@ -18,9 +18,11 @@
 * User account editing
 * User password resetting
 * Page-specific Authorization
-* Ability for users with an account to submit recipes
-* Server-Side paging for pagination component
 * Web API consumption
+* Ability for users with an account to submit recipes
+* Ability for users to favorite recipes
+* Server-Side paging for pagination component
+
 
 ## Database Schema
 ![](ReadMeImages/Recipe-Db-Schema.PNG)
