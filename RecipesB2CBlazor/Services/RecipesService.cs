@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Web;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RecipesB2CBlazor.Helpers;
 using RecipesB2CBlazor.Models;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
@@ -20,24 +17,19 @@ public static class RecipesServiceExtensions
 public class RecipesService : IRecipesService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _recipesScope = string.Empty;
     private readonly string _recipesBaseAddress = string.Empty;
-    private readonly string _recipesTenantId = string.Empty;
-    private readonly ITokenAcquisition _tokenAcquisition;
+    
 
-    public RecipesService(ITokenAcquisition tokenAcquisition, HttpClient httpClient,
+    public RecipesService(HttpClient httpClient,
         IConfiguration configuration)
     {
         _httpClient = httpClient;
-        _tokenAcquisition = tokenAcquisition;
-        _recipesScope = configuration["DownstreamApi:Scopes"];
-        _recipesTenantId = configuration["AzureAd:TenantId"];
         _recipesBaseAddress = configuration["DownstreamApi:BaseUrl"];
     }
 
     public async Task<bool> AddAsync(RecipeModel recipeModel)
     {
-        await PrepareAuthenticatedClientForApp();
+        PrepareAuthenticatedClientForApp();
 
         var jsonRequest = JsonConvert.SerializeObject(recipeModel); //put both these into 
 
@@ -55,7 +47,7 @@ public class RecipesService : IRecipesService
 
     public async Task DeleteAsync(int id)
     {
-        await PrepareAuthenticatedClientForApp();
+        PrepareAuthenticatedClientForApp();
 
         var response = await this._httpClient.DeleteAsync($"{_recipesBaseAddress}Recipes/{id}");
 
@@ -68,7 +60,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeDto> EditAsync(RecipeDto recipeModel)
     {
-        await PrepareAuthenticatedClientForApp();
+        PrepareAuthenticatedClientForApp();
 
         var jsonRequest = JsonConvert.SerializeObject(recipeModel);
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
@@ -88,7 +80,7 @@ public class RecipesService : IRecipesService
 
     public async Task<List<RecipeDto>> GetAllAsync()
     {
-        await PrepareAuthenticatedClientForApp();
+        PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes");
 
@@ -104,7 +96,7 @@ public class RecipesService : IRecipesService
 
     public async Task<List<RecipeDto>> GetRecentsAsync()
     {
-        await PrepareAuthenticatedClientForApp();
+        PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/recent");
 
@@ -120,7 +112,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeModel> GetAsync(int id)
     {
-        await PrepareAuthenticatedClientForApp();
+        PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/id/{id}");
 
@@ -136,7 +128,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipesResponse> GetByKeyword(string keyword, int currentPageNumber, int pageSize)
     {
-        await PrepareAuthenticatedClientForApp();
+        PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/keyword={keyword}/page={currentPageNumber}/pageSize={pageSize}");
 
@@ -150,11 +142,8 @@ public class RecipesService : IRecipesService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
 
-    private async Task PrepareAuthenticatedClientForApp()
+    private void PrepareAuthenticatedClientForApp()
     {
-        var accessToken = await _tokenAcquisition.GetAccessTokenForAppAsync(_recipesScope, JwtBearerDefaults.AuthenticationScheme, tenant: _recipesTenantId);
-        Debug.WriteLine($"access token - {accessToken}");
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 }
