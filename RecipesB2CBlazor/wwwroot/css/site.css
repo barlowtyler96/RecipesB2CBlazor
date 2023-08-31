@@ -6,7 +6,7 @@
     backdrop-filter: blur( 0px );
     -webkit-backdrop-filter: blur( 0px );
     border-radius: 10px;
-    border: 3px solid rgba( 255, 255, 255, 0.18 );
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 .jumbotron-bg-img{
     background-image: url(/RecipeImages/jumbotron-bg-img.jpg);
@@ -19,11 +19,11 @@
     transform: scale(1.05);
 }
 .card-sized-image {
-    width: 40%;
+    width: 24.9rem;
     height: auto;
 }
 .full-sized-image {
-    width: 30%;
+    width: 35rem;
     height: auto;
 }
 .bg-custom-primary {
