@@ -8,26 +8,23 @@
 }
 else if (recipe.RecipeId == RecipeId)
 {
-    <div class="row ingredient-display my-5" id="viewrecipe">
+    <div class="row bg-custom-primary ingredient-display my-5 pb-5" id="viewrecipe">
         <div class="text-xl fw-bold text-center mt-4">@recipe.Name</div>
         <div class="col-md-8 text-center mt-5">
             @recipe.Instructions
+            <img src="@recipe.ImagePath" class="full-sized-image mx-auto d-block rounded-3 mt-5" alt="Dish Image">
         </div>
         <div class="col-md-3 offset-md-1 mt-5">
             <ul class="list-unstyled">
                 @foreach (var i in recipe.RecipeIngredients)
                 {
-                    <li class="small m-2 ingredient-display m-3 p-2">
+                    <li class="small m-2 ingredient-display bg-light m-3 p-2">
                         <i class="fa-solid fa-wheat-awn"></i> @i.Amount @i.Unit @i.IngredientName
                     </li>
                 }
             </ul>
         </div>
-        <div class="col-12">
-            <img src="@recipe.ImagePath" class="full-sized-image mx-auto d-block rounded-3 my-2" alt="Dish Image">
-        </div>
     </div>
-
 }
 
 
