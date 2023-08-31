@@ -1,0 +1,20 @@
+﻿@inject IUsersService usersService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+@page "/favorites"
+<h3>Your Favorites</h3>
+
+@code {
+    private List<RecipeDto>? favoriteRecipesList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            //favoriteRecipesList = await usersService.GetFavoritesAsync();
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+}
