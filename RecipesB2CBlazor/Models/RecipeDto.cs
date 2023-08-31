@@ -20,5 +20,7 @@ public class RecipeDto
 
     [MaxLength(200)]
     public string? ImagePath { get; set; }
+
+    public bool IsFavorite { get; set; } = false;
 }
 
