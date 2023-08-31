@@ -2,10 +2,9 @@
 @attribute [Authorize]
 @using System.Net.Http.Json
 @using System.Net.Http.Headers
-@using Microsoft.Identity.Web
-@using RecipesB2CBlazor.Services;
+
+
 @inject IRecipesService recipesService
-@inject ITokenAcquisition tokenAqcuisition
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 <PageTitle>Submit</PageTitle>
 <div class="container-fluid jumbotron-bg-img">
@@ -70,11 +69,11 @@
     </EditForm>
 
     <div class="row mt-2">
-        @if (isSuccessStatusCode && hasSubmitted == true)
+        @if (isSuccessStatusCode == true && hasSubmitted == true)
         {
             <div class="alert alert-success">Your recipe was submitted. It will be reviewed before being added to the site.</div>
         }
-        else if (!isSuccessStatusCode && hasSubmitted == true)
+        else if (!isSuccessStatusCode == true && hasSubmitted == true)
         {
             <div class="alert alert-danger">There was an error. If the issue persists, please email support at tybardesigns@gmail.com</div>
         }
@@ -88,7 +87,7 @@
     private RecipeModel recipeDto = new RecipeModel();
     private bool isSuccessStatusCode;
     private bool hasSubmitted = false;
-
+   
     private async Task SubmitRecipe()
     {
         try
