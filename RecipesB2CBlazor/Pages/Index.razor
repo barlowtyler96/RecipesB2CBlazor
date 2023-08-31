@@ -1,4 +1,6 @@
-﻿@inject IRecipesService recipesService
+﻿@inject IRecipesService _recipesService
+@inject IUsersService _usersService
+@inject AuthenticationStateProvider _authenticationStateProvider
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @page "/"
 
@@ -28,12 +30,31 @@
 
 @code {
     private List<RecipeDto>? recentRecipesList;
+    private List<UserFavorite>? userFavorites;
+    private bool IsAuthenticated => _authenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            recentRecipesList = await recipesService.GetRecentsAsync();
+            recentRecipesList = await _recipesService.GetRecentsAsync();
+
+            
+            if (IsAuthenticated)
+            {
+                // just get userfavorites here
+                userFavorites = await _usersService.GetUserFavoriteIdsAsync();
+
+                // set IsFavorite Prop here based on userFavorites
+                foreach (var u in userFavorites)
+                {
+                    var matchingRecipe = recentRecipesList.FirstOrDefault(r => r.RecipeId == u.RecipeId);
+                    if (matchingRecipe != null)
+                    {
+                        matchingRecipe.IsFavorite = true;
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {
