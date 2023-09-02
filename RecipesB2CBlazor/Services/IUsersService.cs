@@ -6,5 +6,6 @@ public interface IUsersService
 {
     Task<bool> AddUserFavoriteAsync(int recipeId);
     Task<bool> DeleteUserFavoriteAsync(int recipeId);
-    Task<List<UserFavorite>> GetUserFavoriteIdsAsync();
+    Task<List<RecipeDto>> GetUsersFavoritesAsync();
+    Task<List<int>> GetUserFavoriteIdsAsync();
 }
