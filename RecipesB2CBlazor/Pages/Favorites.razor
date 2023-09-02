@@ -1,7 +1,15 @@
 ﻿@inject IUsersService usersService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @page "/favorites"
+@attribute [Authorize]
+
 <h3>Your Favorites</h3>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <RecipeCards RecipesList="@favoriteRecipesList" />
+    </div>
+</div>
 
 @code {
     private List<RecipeDto>? favoriteRecipesList;
@@ -10,11 +18,20 @@
     {
         try
         {
-            //favoriteRecipesList = await usersService.GetFavoritesAsync();
+            favoriteRecipesList = await usersService.GetUsersFavoritesAsync();
+
+            
         }
         catch (Exception ex)
         {
             ConsentHandler.HandleException(ex);
+        }
+
+        var favoriteRecipeIds = favoriteRecipesList.Select(f => f.RecipeId).ToList();
+
+        foreach (var recipe in favoriteRecipesList)
+        {
+            recipe.IsFavorite = favoriteRecipeIds.Contains(recipe.RecipeId);
         }
     }
 }
