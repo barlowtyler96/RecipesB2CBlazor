@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Identity.Web;
 using RecipesB2CBlazor.StartupConfig;
 
@@ -27,6 +28,16 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRewriter(
+    new RewriteOptions().Add(
+        context =>
+        {
+            if (context.HttpContext.Request.Path == "/MicrosoftIdentity/Account/SignedOut")
+            {
+                context.HttpContext.Response.Redirect("/");
+            }
+        }));
 
 app.MapControllers();
 app.MapBlazorHub();
