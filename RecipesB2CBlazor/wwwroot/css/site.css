@@ -19,13 +19,14 @@
     transform: scale(1.05);
 }
 .card-sized-image {
-    width: 24.9rem;
-    height: auto;
+    width: 100%;
+    height: 20rem;
 }
 .full-sized-image {
     width: 35rem;
     height: auto;
 }
+
 .bg-custom-primary {
     background-color: #DBFFD7;
 }
