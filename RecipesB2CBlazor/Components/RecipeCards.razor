@@ -7,40 +7,37 @@
 
 @if (RecipesList is null)
 {
-    <div class="row justify-content-center">
-        <div class="text-xxl">Loading...</div>
-    </div>
+    <div class="text-xxl">Loading...</div>
+    
     
 }
 else
 {
-    <div class="row justify-content-center pb-2">
-        @foreach (var r in RecipesList)
-        {
-            <div class="col-sm-12 col-md-3 my-3 d-flex align-items-stretch justify-content-sm-center">
-                <div class="card border-1 border-dark" style="width: 25rem;">
-                    <img src="@r.ImagePath" class="card-img-top card-sized-image" alt="Dish Image">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">@r.Name</h5>
-                        <p class="text-sm card-text">@r.Description</p>
-                    </div>
-                    <div class="card-footer">
-                        <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-outline-danger">View Full Recipe</button>
-                        <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn btn-outline-danger">
-                            @if (r.IsFavorite)
-                            {
-                                <span><i class="fa-solid fa-heart" style="color: #ff0000;"></i></span>
-                            }
-                            else
-                            {
-                                <i class="fa-regular fa-heart fa-lg" style="color: #ff0000;"></i>
-                            }
-                        </button>
-                    </div>
+    @foreach (var r in RecipesList)
+    {
+        <div class="col-sm-12 col-md-3 my-3 d-flex align-items-stretch justify-content-sm-center">
+            <div class="card border-1 border-dark">
+                <img src="@r.ImagePath" class="card-img-top card-sized-image" alt="Dish Image">
+                <div class="card-body">
+                    <h5 class="card-title text-center">@r.Name</h5>
+                    <p class="text-sm card-text">@r.Description</p>
+                </div>
+                <div class="card-footer">
+                    <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-outline-danger">View Full Recipe</button>
+                    <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn btn-outline-danger">
+                        @if (r.IsFavorite)
+                        {
+                            <span><i class="fa-solid fa-heart" style="color: #ff0000;"></i></span>
+                        }
+                        else
+                        {
+                            <i class="fa-regular fa-heart fa-lg" style="color: #ff0000;"></i>
+                        }
+                    </button>
                 </div>
             </div>
-        }
-    </div>
+        </div>
+    }
 
     @if (ShowingRecipe)
     {
