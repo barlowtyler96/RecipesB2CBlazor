@@ -19,17 +19,15 @@ public class UsersService : IUsersService
     private readonly HttpClient _httpClient;
     private readonly string _usersScope = string.Empty;
     private readonly string _usersBaseAddress = string.Empty;
-    private readonly string _tenantId = string.Empty;
     private readonly ITokenAcquisition _tokenAcquisition;
 
     public UsersService(ITokenAcquisition tokenAcquisition, HttpClient httpClient,
-        IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        IConfiguration configuration)
     {
         _httpClient = httpClient;
         _tokenAcquisition = tokenAcquisition;
         _usersScope = configuration["DownstreamApi:Scopes"];
         _usersBaseAddress = configuration["DownstreamApi:BaseUrl"];
-        _tenantId = configuration["AzureAdB2C:TenantId"];
     }
 
     public async Task<bool> AddUserAsync(RecipeModel recipeModel)
@@ -92,7 +90,23 @@ public class UsersService : IUsersService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}.");
     }
 
-    public async Task<List<UserFavorite>> GetUserFavoriteIdsAsync()
+    public async Task<List<RecipeDto>> GetUsersFavoritesAsync()
+    {
+        await PrepareAuthenticatedClientForUser();
+
+        var response = await _httpClient.GetAsync($"{_usersBaseAddress}Users/favorites");
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            IEnumerable<RecipeDto> userFavorites = JsonConvert.DeserializeObject<IEnumerable<RecipeDto>>(content);
+
+            return userFavorites.ToList();
+        }
+        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
+    }
+
+    public async Task<List<int>> GetUserFavoriteIdsAsync()
     {
         await PrepareAuthenticatedClientForUser();
 
@@ -101,7 +115,7 @@ public class UsersService : IUsersService
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var content = await response.Content.ReadAsStringAsync();
-            IEnumerable<UserFavorite> userFavorites = JsonConvert.DeserializeObject<IEnumerable<UserFavorite>>(content);
+            IEnumerable<int> userFavorites = JsonConvert.DeserializeObject<IEnumerable<int>>(content);
 
             return userFavorites.ToList();
         }
