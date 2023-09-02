@@ -4,7 +4,7 @@
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @page "/"
 
-<PageTitle>Tyler's Recipes</PageTitle>
+<PageTitle>The Recipe Vault</PageTitle>
 
 <div class="container-fluid jumbotron-bg-img">
     <div class="row align-items-center h-100 text-center">
@@ -30,7 +30,7 @@
 
 @code {
     private List<RecipeDto>? recentRecipesList;
-    private List<UserFavorite>? userFavorites;
+    private List<int>? userFavoritesIds;
     private bool IsAuthenticated => _authenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated;
 
     protected override async Task OnInitializedAsync()
@@ -43,12 +43,12 @@
             if (IsAuthenticated)
             {
                 // just get userfavorites here
-                userFavorites = await _usersService.GetUserFavoriteIdsAsync();
+                userFavoritesIds = await _usersService.GetUserFavoriteIdsAsync();
 
                 // set IsFavorite Prop here based on userFavorites
-                foreach (var u in userFavorites)
+                foreach (var u in userFavoritesIds)
                 {
-                    var matchingRecipe = recentRecipesList.FirstOrDefault(r => r.RecipeId == u.RecipeId);
+                    var matchingRecipe = recentRecipesList.FirstOrDefault(r => r.RecipeId == u);
                     if (matchingRecipe != null)
                     {
                         matchingRecipe.IsFavorite = true;
