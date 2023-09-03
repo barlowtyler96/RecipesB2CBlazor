@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.17.0" />
     <PackageReference Include="Microsoft.Identity.Web" Version="2.12.4" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.12.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -17,11 +18,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\RecipeImages\CategoryImages\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\RecipeImages\DishImages\carneasadatacos.jpg" />
-    <None Include="wwwroot\RecipeImages\DishImages\carnitastacos.jpg" />
+    <Folder Include="wwwroot\RecipeImages\DishImages\" />
   </ItemGroup>
 
 </Project>
