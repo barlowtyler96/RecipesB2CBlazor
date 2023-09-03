@@ -8,6 +8,7 @@ public static class DependencyInjectionExtensions
 {
     public static void AddCustomServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
         builder.Services.AddRecipesService(builder.Configuration);
         builder.Services.AddUsersService(builder.Configuration);
     }
