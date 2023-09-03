@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Identity.Web;
+using Newtonsoft.Json;
 using RecipesB2CBlazor.Helpers;
 using RecipesB2CBlazor.Models;
 using System.Net;
@@ -16,14 +17,18 @@ public static class RecipesServiceExtensions
 }
 public class RecipesService : IRecipesService
 {
+    private readonly string _usersScope;
     private readonly HttpClient _httpClient;
+    private readonly ITokenAcquisition _tokenAcquisition;
     private readonly string _recipesBaseAddress = string.Empty;
     
 
     public RecipesService(HttpClient httpClient,
-        IConfiguration configuration)
+        IConfiguration configuration, ITokenAcquisition tokenAcquisition)
     {
+        _usersScope = configuration["DownstreamApi:Scopes"];
         _httpClient = httpClient;
+        _tokenAcquisition = tokenAcquisition;
         _recipesBaseAddress = configuration["DownstreamApi:BaseUrl"];
     }
 
@@ -142,8 +147,10 @@ public class RecipesService : IRecipesService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
 
-    private void PrepareAuthenticatedClientForApp()
+    private async Task PrepareAuthenticatedClientForApp()
     {
+        var accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { _usersScope });
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 }
