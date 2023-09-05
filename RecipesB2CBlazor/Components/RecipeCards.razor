@@ -7,7 +7,7 @@
 
 @if (RecipesList is null)
 {
-    <div class="text-xxl">Loading...</div>
+    <div class="mt-5 text-xl text-center"><i class="fa fa-refresh"></i></div>
     
     
 }
@@ -60,7 +60,7 @@ else
         SelectedRecipeId = recipeId;
         ShowingRecipe = !ShowingRecipe;
 
-        await Task.Delay(50);
+        await Task.Delay(500);
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 
