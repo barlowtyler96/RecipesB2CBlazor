@@ -32,27 +32,29 @@ public class RecipesService : IRecipesService
         _recipesBaseAddress = configuration["DownstreamApi:BaseUrl"];
     }
 
-    public async Task<bool> AddAsync(RecipeModel recipeModel)
+    public async Task<int> AddAsync(RecipeModel recipeModel)
     {
-        PrepareAuthenticatedClientForApp();
+        await PrepareAuthenticatedClientForApp();
 
-        var jsonRequest = JsonConvert.SerializeObject(recipeModel); //put both these into 
-
+        var jsonRequest = JsonConvert.SerializeObject(recipeModel);
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
-        var response = await this._httpClient.PostAsync($"{_recipesBaseAddress}Administrator", jsonContent);
+        var response = await this._httpClient.PostAsync($"{_recipesBaseAddress}Users/share", jsonContent);
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var createdRecipeId = JsonConvert.DeserializeObject<int>(responseContent);
 
-            return response.IsSuccessStatusCode;
+            return createdRecipeId;
         }
+
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}.");
     }
 
     public async Task DeleteAsync(int id)
     {
-        PrepareAuthenticatedClientForApp();
+        await PrepareAuthenticatedClientForApp();
 
         var response = await this._httpClient.DeleteAsync($"{_recipesBaseAddress}Recipes/{id}");
 
@@ -65,7 +67,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeDto> EditAsync(RecipeDto recipeModel)
     {
-        PrepareAuthenticatedClientForApp();
+        await PrepareAuthenticatedClientForApp();
 
         var jsonRequest = JsonConvert.SerializeObject(recipeModel);
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
@@ -85,7 +87,7 @@ public class RecipesService : IRecipesService
 
     public async Task<List<RecipeDto>> GetAllAsync()
     {
-        PrepareAuthenticatedClientForApp();
+        await PrepareAuthenticatedClientForApp();
 
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes");
 
@@ -101,8 +103,6 @@ public class RecipesService : IRecipesService
 
     public async Task<List<RecipeDto>> GetRecentsAsync()
     {
-        PrepareAuthenticatedClientForApp();
-
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/recent");
 
         if (response.StatusCode == HttpStatusCode.OK)
@@ -117,8 +117,6 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeModel> GetAsync(int id)
     {
-        PrepareAuthenticatedClientForApp();
-
         var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/id/{id}");
 
         if (response.StatusCode == HttpStatusCode.OK)
@@ -131,11 +129,11 @@ public class RecipesService : IRecipesService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
 
-    public async Task<RecipesResponse> GetByKeyword(string keyword, int currentPageNumber, int pageSize)
+    public async Task<RecipesResponse> GetByKeyword(string keyword, int page, int pageSize)
     {
-        PrepareAuthenticatedClientForApp();
+        string uri = _recipesBaseAddress + "Recipes/search" + "?keyword=" + WebUtility.UrlEncode(keyword) + "&page=" + page + "&pageSize=" + pageSize;
 
-        var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/keyword={keyword}/page={currentPageNumber}/pageSize={pageSize}");
+        var response = await _httpClient.GetAsync(uri);
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
