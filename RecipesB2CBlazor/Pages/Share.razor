@@ -13,9 +13,7 @@
     <div class="row align-items-center h-100 text-center">
         <div class="col-6 mx-auto">
             <div class="card h-100 justify-content-center">
-                <h1 class="fw-bold text-center m-3">
-                    Share a Recipe 
-                </h1>
+                <h1 class="fw-bold text-center m-3">Share a Recipe</h1>
             </div>
         </div>
     </div>
@@ -24,95 +22,109 @@
         <DataAnnotationsValidator />
         <div class="row mt-3">
             <div class="col-md-3">
-                <label>Recipe Name:</label>
+                <label class="text-lg">Recipe Name:</label>
                 <InputText @bind-Value="recipeModel.Name" class="form-control" />
                 <ValidationMessage For="@(() => recipeModel.Name)" />
             </div>
             <div class="col-md-9">
-                <label>Recipe Description:</label>
+                <label class="text-lg">Recipe Description:</label>
                 <InputText @bind-Value="recipeModel.Description" class="form-control" />
                 <ValidationMessage For="@(() => recipeModel.Description)" />
             </div>
+        </div>
+
+        <div class="row mt-3">
             <div class="col-md-12">
-                <label>Recipe Instructions:</label>
+                <label class="text-lg">Recipe Instructions:</label>
                 <InputText @bind-Value="recipeModel.Instructions" class="form-control" />
                 <ValidationMessage For="@(() => recipeModel.Instructions)" />
             </div>
+        </div>
 
-            <div class="h4">Ingredients</div>
-            
-            <div class="col-md-12">
-                <div class="col-md-12 col-sm-3">
-                    <button type="button" class="btn btn-success" @onclick="AddRecipeIngredient"><i class="fa-solid fa-plus"></i> Add an Ingredient</button>
-                </div>
-                @foreach (var recipeIngredient in recipeModel.RecipeIngredients)
-                {
-                    <div class="col-md-4">
-                        <label>Amount:</label>
-                        <InputNumber @bind-Value="recipeIngredient.Amount" class="form-control" />
-                    </div>
-                    <div class="col-md-4">
-                        <label>Unit:</label>
-                        <InputText @bind-Value="recipeIngredient.Unit" class="form-control" />
-                        <div class="form-text">*This field may be left empty if necessary.*</div>
-                    </div>
-                    <div class="col-md-4">
-                        <label>Ingredient:</label>
-                        <InputText @bind-Value="recipeIngredient.IngredientName" class="form-control" />
-                    </div>
-                }
+        <div class="row mt-3">
+            <div class="col-md-12 col-sm-3 my-2">
+                <button type="button" class="btn btn-success" @onclick="AddRecipeIngredient">
+                    <i class="fa-solid fa-plus"></i> Add an Ingredient
+                </button>
             </div>
+        </div>
+
+        @foreach (var recipeIngredient in recipeModel.RecipeIngredients)
+        {
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <label class="text-lg">Amount:</label>
+                    <InputNumber @bind-Value="recipeIngredient.Amount" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="text-lg">Unit:</label>
+                    <InputText @bind-Value="recipeIngredient.Unit" class="form-control" />
+                    <div class="form-text">*This field may be left empty if necessary.*</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="text-lg">Ingredient:</label>
+                    <InputText @bind-Value="recipeIngredient.IngredientName" class="form-control" />
+                </div>
+            </div>
+        }
+
+        <div class="row mt-3">
             <div class="col-sm-6">
                 <label>
                     <InputFile class="form-control" disabled="@fileLoading" OnChange="@OnInputFileChange" single />
+                    <div class="form-text">*Optional*</div>
                 </label>
                 @if (fileLoading)
                 {
-                    <i class="fa fa-refresh"></i> <span>Loading...</span>
+                    <i class="fa fa-refresh"></i> <span>Uploading...</span>
                 }
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
         </div>
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary w-100">Submit</button>
+            </div>
+        </div>
+
+
     </EditForm>
-    @if(errors.Count > 0)
+
+    @if (errors.Count > 0)
     {
-        <ul>
-            @foreach(var error in errors)
-            {
-                <li class="alert alert-danger">@error</li>
-            }
-            
-        </ul>
+        @foreach (var error in errors)
+        {
+            <div class="alert alert-danger">@error</div>
+        }
     }
 
     <div class="row mt-2">
-        @if (isSuccessStatusCode == true && hasSubmitted == true)
+        @if (createdRecipeId >= 0 && hasSubmitted == true)
         {
-            <div class="alert alert-success">Your recipe was submitted. It will be reviewed before being added to the site.</div>
+            <div class="alert alert-success">Your recipe was submitted. It will be reviewed before being permanently added to the site.</div>
             <RecipeCards RecipesList="addedRecipesList"></RecipeCards>
         }
-        else if (!isSuccessStatusCode == true && hasSubmitted == true)
+        else if (createdRecipeId <= 0 && hasSubmitted == true)
         {
             <div class="alert alert-danger">There was an error. If the issue persists, please email support at tybardesigns@gmail.com</div>
         }
     </div>
 </div>
 
+
 @code {
     private RecipeModel recipeModel = new RecipeModel();
     private List<RecipeDto> addedRecipesList = new();
-    private long maxFileSize = 1024 * 1024 * 3;
-    private bool isSuccessStatusCode;
+    private const long maxFileSize = 1024 * 1024 * 3;
+    private int createdRecipeId;
     private bool hasSubmitted = false;
     private bool fileLoading;
     private List<string> errors = new();
     private IBrowserFile? selectedFile;
-    private FileUploadViewModel fileUploadViewModel = new();
 
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
         selectedFile = e.File;
-        this.StateHasChanged();
     }
 
     private async Task OnUploadSubmit()
@@ -122,50 +134,32 @@
         {
             var newFileName = Path.ChangeExtension(
                 Path.GetRandomFileName(),
-                Path.GetExtension(selectedFile.Name)
+                Path.GetExtension(selectedFile!.Name)
             );
             var blobUrl = await _blobStorageService.UploadFileToBlobAsync(newFileName, selectedFile.ContentType, selectedFile.OpenReadStream(maxFileSize));
-            if (blobUrl != null)
-            {
-                fileUploadViewModel.FileName = newFileName;
-                fileUploadViewModel.FileStorageUrl = blobUrl;
-                fileUploadViewModel.ContentType = selectedFile.ContentType;
-                recipeModel.ImagePath = fileUploadViewModel.FileStorageUrl;
-            }
-            else
-            {
-                errors.Add("File Upload failed, Please try again");
-            }
+            recipeModel.ImagePath = blobUrl;
         }
         catch (Exception ex)
         {
-            errors.Add($"File: {selectedFile.Name} Error: {ex.Message}");
+            errors.Add($"File: {selectedFile!.Name} Error: {ex.Message}");
         }
         fileLoading = false;
-        this.StateHasChanged();
     }
-
-
-
-
-
-
-
-
-
-
 
     private async Task SubmitRecipe()
     {
+        hasSubmitted = false; // Clear previous submission status
         try
         {
-            hasSubmitted = false; // Clear previous submission status
-            await OnUploadSubmit();
-            isSuccessStatusCode = await _recipesService.AddAsync(recipeModel);
-
+            if(selectedFile is not null)
+            {
+                await OnUploadSubmit();
+            }
+            createdRecipeId = await _recipesService.AddAsync(recipeModel);
 
             RecipeDto recipeDto = new RecipeDto
             {
+                RecipeId = createdRecipeId,
                 Name = recipeModel.Name,
                 Description = recipeModel.Description,
                 ImagePath = recipeModel.ImagePath
@@ -176,6 +170,7 @@
         }
         catch (Exception ex)
         {
+            errors.Add($"{ex.Message}");
         }
     }
 
