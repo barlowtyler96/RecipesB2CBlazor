@@ -13,102 +13,115 @@
     <div class="row align-items-center h-100 text-center">
         <div class="col-6 mx-auto">
             <div class="card h-100 justify-content-center">
-                <h1 class="fw-bold text-center m-3">Share a Recipe</h1>
+                <h1 class="fw-bold text-center m-3">Share</h1>
             </div>
         </div>
     </div>
+</div>
 
-    <EditForm Model="recipeModel" OnValidSubmit="SubmitRecipe">
-        <DataAnnotationsValidator />
-        <div class="row mt-3">
-            <div class="col-md-3">
-                <label class="text-lg">Recipe Name:</label>
-                <InputText @bind-Value="recipeModel.Name" class="form-control" />
-                <ValidationMessage For="@(() => recipeModel.Name)" />
-            </div>
-            <div class="col-md-9">
-                <label class="text-lg">Recipe Description:</label>
-                <InputText @bind-Value="recipeModel.Description" class="form-control" />
-                <ValidationMessage For="@(() => recipeModel.Description)" />
-            </div>
+
+<EditForm Model="recipeModel" OnValidSubmit="SubmitRecipe">
+    <DataAnnotationsValidator />
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <label class="text-lg">Recipe Name:</label>
+            <InputText @bind-Value="recipeModel.Name" class="form-control" />
+            <ValidationMessage For="@(() => recipeModel.Name)" />
         </div>
-
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <label class="text-lg">Recipe Instructions:</label>
-                <InputText @bind-Value="recipeModel.Instructions" class="form-control" />
-                <ValidationMessage For="@(() => recipeModel.Instructions)" />
-            </div>
+        <div class="col-md-9">
+            <label class="text-lg">Recipe Description:</label>
+            <InputText @bind-Value="recipeModel.Description" class="form-control" />
+            <ValidationMessage For="@(() => recipeModel.Description)" />
         </div>
+    </div>
 
-        <div class="row mt-3">
-            <div class="col-md-12 col-sm-3 my-2">
-                <button type="button" class="btn btn-success" @onclick="AddRecipeIngredient">
-                    <i class="fa-solid fa-plus"></i> Add an Ingredient
-                </button>
-            </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <label class="text-lg">Recipe Instructions:</label>
+            <InputText @bind-Value="recipeModel.Instructions" class="form-control" />
+            <ValidationMessage For="@(() => recipeModel.Instructions)" />
         </div>
+    </div>
 
-        @foreach (var recipeIngredient in recipeModel.RecipeIngredients)
-        {
-            <div class="row mt-3">
-                <div class="col-md-4">
-                    <label class="text-lg">Amount:</label>
-                    <InputNumber @bind-Value="recipeIngredient.Amount" class="form-control" />
-                </div>
-                <div class="col-md-4">
-                    <label class="text-lg">Unit:</label>
-                    <InputText @bind-Value="recipeIngredient.Unit" class="form-control" />
-                    <div class="form-text">*This field may be left empty if necessary.*</div>
-                </div>
-                <div class="col-md-4">
-                    <label class="text-lg">Ingredient:</label>
-                    <InputText @bind-Value="recipeIngredient.IngredientName" class="form-control" />
-                </div>
-            </div>
-        }
-
-        <div class="row mt-3">
-            <div class="col-sm-6">
-                <label>
-                    <InputFile class="form-control" disabled="@fileLoading" OnChange="@OnInputFileChange" single />
-                    <div class="form-text">*Optional*</div>
-                </label>
-                @if (fileLoading)
-                {
-                    <i class="fa fa-refresh"></i> <span>Uploading...</span>
-                }
-            </div>
+    <div class="row mt-3">
+        <div class="col-md-12 col-sm-3 my-2">
+            <button type="button" class="btn btn-success" @onclick="AddRecipeIngredient">
+                <i class="fa-solid fa-plus"></i> Add an Ingredient
+            </button>
         </div>
+    </div>
 
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-primary w-100">Submit</button>
-            </div>
-        </div>
-
-
-    </EditForm>
-
-    @if (errors.Count > 0)
+    @foreach (var recipeIngredient in recipeModel.RecipeIngredients)
     {
-        @foreach (var error in errors)
-        {
-            <div class="alert alert-danger">@error</div>
-        }
+        <div class="row mt-3">
+            <div class="col-3">
+                <label class="text-lg">Amount:</label>
+                <InputNumber @bind-Value="recipeIngredient.Amount" class="form-control" />
+            </div>
+            <div class="col-4">
+                <label class="text-lg">Unit:</label>
+                <InputText @bind-Value="recipeIngredient.Unit" class="form-control" />
+                <div class="form-text">*May be left empty if necessary.*</div>
+            </div>
+            <div class="col-4">
+                <label class="text-lg">Ingredient:</label>
+                <InputText @bind-Value="recipeIngredient.IngredientName" class="form-control" />
+            </div>
+            <div class="col-1 d-flex align-items-center justify-content-center">
+                <i class="fa-solid fa-trash-can fa-lg" style="color: #d63d3d;"></i>
+            </div>
+        </div>
+
     }
 
-    <div class="row mt-2">
-        @if (createdRecipeId >= 0 && hasSubmitted == true)
+    <div class="row mt-3">
+        <div class="col-sm-12">
+            <label>
+                <InputFile class="form-control" disabled="@fileLoading" OnChange="@OnInputFileChange" single />
+                <div class="form-text">*Optional*</div>
+            </label>
+            @if (fileLoading)
+            {
+                <i class="fa fa-refresh"></i> <span>Uploading...</span>
+            }
+        </div>
+    </div>
+    <div class="row mb-3">
+        @if (errors.Count > 0)
         {
-            <div class="alert alert-success">Your recipe was submitted. It will be reviewed before being permanently added to the site.</div>
-            <RecipeCards RecipesList="addedRecipesList"></RecipeCards>
+            @foreach (var error in errors)
+            {
+                <div class="alert alert-danger">@error</div>
+            }
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <button type="submit" class="btn disabled btn-primary w-100">Submit</button>
+                </div>
+            </div>
         }
-        else if (createdRecipeId <= 0 && hasSubmitted == true)
+        else
         {
-            <div class="alert alert-danger">There was an error. If the issue persists, please email support at tybardesigns@gmail.com</div>
+            <div class="col-12 mt-3">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                </div>
+            </div>
         }
     </div>
+</EditForm>
+
+
+
+<div class="row mt-2">
+    @if (createdRecipeId >= 0 && hasSubmitted == true)
+    {
+        <div class="alert alert-success">Your recipe was submitted. It will be reviewed before being permanently added to the site.</div>
+        <RecipeCards RecipesList="addedRecipesList"></RecipeCards>
+    }
+    else if (createdRecipeId <= 0 && hasSubmitted == true)
+    {
+        <div class="alert alert-danger">There was an error. If the issue persists, please email support at tybardesigns@gmail.com</div>
+    }
 </div>
 
 
@@ -124,7 +137,15 @@
 
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
-        selectedFile = e.File;
+        if (e.File.Size > maxFileSize)
+        {
+            errors.Add($"The file is too large. File must be smaller than 3MB.");
+        }
+        else
+        {
+            selectedFile = e.File;
+            errors.Clear();
+        }
     }
 
     private async Task OnUploadSubmit()
