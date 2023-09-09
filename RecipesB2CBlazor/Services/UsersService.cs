@@ -30,15 +30,13 @@ public class UsersService : IUsersService
         _usersBaseAddress = configuration["DownstreamApi:BaseUrl"];
     }
 
-    public async Task<bool> AddUserAsync(RecipeModel recipeModel)
+    public async Task<bool> AddNewUserAsync()
     {
         await PrepareAuthenticatedClientForUser();
 
-        var jsonRequest = JsonConvert.SerializeObject(recipeModel); //put both these into 
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_usersBaseAddress}Users/new");
 
-        var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsync($"{_usersBaseAddress}user", jsonContent);
+        var response = await _httpClient.SendAsync(request);
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
