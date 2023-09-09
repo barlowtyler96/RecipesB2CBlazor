@@ -3,15 +3,16 @@
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @page "/"
+@using RecipesB2CBlazor.Helpers;
 
-<PageTitle>CulinaryShares</PageTitle>
+<PageTitle>Culinary Shares</PageTitle>
 
-<div class="container-fluid jumbotron-bg-img">
+<div class="container-fluid jumbotron-bg-img custom-font">
     <div class="row align-items-center h-100 text-center">
-        <div class="col-6 mx-auto">
-            <div class="card py-1 h-100 justify-content-center">
-                <h1 class="fw-bold text-sm">
-                    Welcome to Tyler's Recipes
+        <div class="col-md-6 col-sm-12 mx-auto">
+            <div class="card h-100 justify-content-center">
+                <h1 class="fw-bold text-center m-3">
+                    Welcome to Culinary Shares
                 </h1>
             </div>
         </div>
@@ -22,23 +23,35 @@
     <i class="fa-regular fa-clock"></i> Recently Added Recipes <i class="fa-regular fa-clock"></i>
 </div>
 
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <RecipeCards RecipesList="@recentRecipesList" />
+@if (recipesResponse.Data is not null)
+{
+    <div class="container-fluid">
+        <RecipeCards RecipesList="@recipesResponse.Data" />
     </div>
-</div>
+}
+@if (recipesResponse.Data is not null)
+{
+    <div class="container-fluid">
+        <div class="row py-3 text-center">
+            <Pagination CurrentPage="@recipesResponse.CurrentPageNumber"
+                        TotalItems="@recipesResponse.TotalCount"
+                        ItemsPerPage="@recipesResponse.PageSize"
+                        OnPageChanged="HandlePageChanged">
+            </Pagination>
+        </div>
+    </div>
+}
 
 @code {
-    private List<RecipeDto>? recentRecipesList;
+    private RecipesResponse recipesResponse = new RecipesResponse();
     private List<int>? userFavoritesIds;
-    private bool IsAuthenticated => _authenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated;
+    private bool IsAuthenticated => _authenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity!.IsAuthenticated;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            recentRecipesList = await _recipesService.GetRecentsAsync();
-
+            recipesResponse = await _recipesService.GetRecentsAsync(recipesResponse.CurrentPageNumber, recipesResponse.PageSize);
             
             if (IsAuthenticated)
             {
@@ -48,13 +61,25 @@
                 // set IsFavorite Prop here based on userFavorites
                 foreach (var u in userFavoritesIds)
                 {
-                    var matchingRecipe = recentRecipesList.FirstOrDefault(r => r.RecipeId == u);
+                    var matchingRecipe = recipesResponse.Data!.FirstOrDefault(r => r.RecipeId == u);
                     if (matchingRecipe != null)
                     {
                         matchingRecipe.IsFavorite = true;
                     }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+
+    private async Task HandlePageChanged(int newPage)
+    {
+        try
+        {
+            recipesResponse = await _recipesService.GetRecentsAsync(newPage, recipesResponse.PageSize);
         }
         catch (Exception ex)
         {
