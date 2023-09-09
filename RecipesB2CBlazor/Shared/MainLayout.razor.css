@@ -9,8 +9,9 @@ main {
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, #81c89a 0%, #E59560 95%);
+    background-image: linear-gradient(180deg, #a2cab0 20%, #ff6a00a1 90%);
 }
+/*background-image: linear-gradient(180deg, #81c89a 0%, #E59560 95%);*/
 @media (min-width: 641px) {
     .page {
         flex-direction: row;

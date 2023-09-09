@@ -1,13 +1,5 @@
 .navbar-toggler {
-    background-color: #e59560;
-}
-
-.top-row {
-    height: 5rem;
-}
-
-.navbar-brand {
-    font-size: 1.1rem;
+    background-color: black;
 }
 
 .oi {
@@ -33,21 +25,22 @@
     .nav-item ::deep a {
         color: #d7d7d7;
         border-radius: 10px;
-        height: 4rem;
+        height: 4rem;   
         display: flex;
         align-items: center;
         line-height: 3rem;
     }
 
         .nav-item ::deep a.active {
-            background-color: #fff;
+            border: 10px;
+            border-color: white;
+            background-image: linear-gradient(90deg, #ffff 20%, #a2cab000 90%);
             color: #CCD7D8;
         }
 
-.nav-item ::deep a:hover {
-    background-color: white;
-    color: black;
-}
+        .nav-item ::deep a:hover {
+            background-image: linear-gradient(90deg, #ffff 10%, #a2cab000 90%);
+        }
 
 @media (min-width: 641px) {
     .navbar-toggler {
