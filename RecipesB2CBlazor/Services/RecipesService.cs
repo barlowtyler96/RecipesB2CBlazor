@@ -2,9 +2,11 @@
 using Newtonsoft.Json;
 using RecipesB2CBlazor.Helpers;
 using RecipesB2CBlazor.Models;
+using System.Drawing.Printing;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace RecipesB2CBlazor.Services;
 
@@ -100,17 +102,19 @@ public class RecipesService : IRecipesService
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
-
-    public async Task<List<RecipeDto>> GetRecentsAsync()
+    public async Task<RecipesResponse> GetRecentsAsync(int page, int pageSize)
     {
-        var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/recent");
+        string uri = _recipesBaseAddress + "Recipes/recent" + "?page=" + page + "&pageSize=" + pageSize;
+
+        var response = await _httpClient.GetAsync(uri);
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var content = await response.Content.ReadAsStringAsync();
-            IEnumerable<RecipeDto> recipeDtoList = JsonConvert.DeserializeObject<IEnumerable<RecipeDto>>(content);
 
-            return recipeDtoList.ToList();
+            var recipesResponse = JsonConvert.DeserializeObject<RecipesResponse>(content);
+
+            return recipesResponse;
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }

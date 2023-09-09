@@ -11,5 +11,5 @@ public interface IRecipesService
     Task<List<RecipeDto>> GetAllAsync();
     Task<RecipeModel> GetAsync(int id);
     Task<RecipesResponse> GetByKeyword(string keyword, int currentPageNumber, int pageSize);
-    Task<List<RecipeDto>> GetRecentsAsync();
+    Task<RecipesResponse> GetRecentsAsync(int page, int pageSize);
 }
