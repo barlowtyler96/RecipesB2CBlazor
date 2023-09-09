@@ -1,22 +1,15 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 .ingredient-display {
-    background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-    backdrop-filter: blur( 0px );
     -webkit-backdrop-filter: blur( 0px );
     border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
-.jumbotron-bg-img{
-    background-image: url(/RecipeImages/jumbotron-bg-img.jpg);
-    height: 225px;
+.view-recipe-card {
+    background-image: linear-gradient(180deg, #ff6a00a1 20%, #fff 90%);
 }
-.card-pop {
-    transition: transform 0.3s ease;
-}
-.card-pop:hover {
-    transform: scale(1.05);
+.header {
+    background-image: linear-gradient(180deg, #ffd8009b 20%, #fff 90%);
 }
 .card-sized-image {
     width: 100%;
@@ -29,12 +22,6 @@
 .custom-font {
     font-family: 'Rye', cursive;
     text-shadow: 8px;
-}
-.bg-custom-primary {
-    background-color: #81c89a;
-}
-.custom-primary-color {
-    background-color: #DBFFD7;
 }
 .text-xxl{
     font-size: 50px;
