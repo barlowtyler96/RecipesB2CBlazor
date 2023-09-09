@@ -1,21 +1,24 @@
-﻿@inject IUsersService usersService
+﻿@page "/yourcookbook"
+@inject IUsersService usersService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
-@page "/yourcookbook"
-<PageTitle>Your Cookbook</PageTitle>
 @attribute [Authorize]
-
-
+<PageTitle>yo</PageTitle> 
 
 <div class="container-fluid jumbotron-bg-img custom-font">
     <div class="row align-items-center h-100 text-center">
-        <div class="col-md-6 col-sm-12 mx-auto">
-            <div class="card h-100 justify-content-center">
-                <h1 class="fw-bold text-center m-3">
+        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 mx-auto">
+            <div class="ingredient-display">
+                <h1 class="text-center m-3 p-3">
                     <AuthorizeView>
                         <Authorized>
-                            @context.User.Claims.FirstOrDefault(c => c.Type.Contains("extension_FirstName"))?.Value's Kitchen
+                            <i class="fa-solid fa-book"></i>
+                            @context.User.Claims.FirstOrDefault(c => c.Type.Contains("extension_FirstName"))?.Value's Cookbook
+                            <i class="fa-solid fa-book"></i>
                         </Authorized>
-                    </AuthorizeView>
+                        <NotAuthorized>
+                            NotAuthorized
+                        </NotAuthorized>
+                    </AuthorizeView>    
                 </h1>
             </div>
         </div>
