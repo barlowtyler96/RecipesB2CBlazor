@@ -20,9 +20,6 @@ public static class DependencyInjectionExtensions
             .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"))
             .EnableTokenAcquisitionToCallDownstreamApi(new string[] { builder.Configuration["DownstreamApi:Scopes"] })
             .AddInMemoryTokenCaches();
-  
-
-        builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddControllersWithViews().AddMicrosoftIdentityUI();
     }
