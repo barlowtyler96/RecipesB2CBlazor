@@ -1,9 +1,9 @@
 .navbar-toggler {
-    background-color: black;
+    background-color: #e59560;
 }
 
 .top-row {
-    height: 3.5rem;
+    height: 5rem;
 }
 
 .navbar-brand {
@@ -39,10 +39,10 @@
         line-height: 3rem;
     }
 
-.nav-item ::deep a.active {
-    background-color: white;
-    color: white;
-}
+        .nav-item ::deep a.active {
+            background-color: #fff;
+            color: #CCD7D8;
+        }
 
 .nav-item ::deep a:hover {
     background-color: white;

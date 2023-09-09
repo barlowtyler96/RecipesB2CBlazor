@@ -1,11 +1,14 @@
-<div class="top-row ps-3 navbar navbar-dark">
+<div class="navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand text-black fw-bold" href="">CulinaryShares</a>
+        <a class="navbar-brand text-black" href="#">
+            <img src="/RecipeImages/culinary-shares-logo.png" alt="CulinaryShares Logo" width="180" height="45" class="d-inline-block align-text-top">
+        </a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
+
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
@@ -20,14 +23,31 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link text-black" href="favorites">
-                <span class="oi oi-heart" aria-hidden="true"></span> Favorites
+            <NavLink class="nav-link text-black" href="yourcookbook">
+                <span class="oi oi-heart" aria-hidden="true"></span> Cookbook
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link text-black" href="share">
                 <span class="oi oi-plus" aria-hidden="true"></span> Share
             </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <AuthorizeView>
+                <Authorized>
+                    <NavLink class="nav-link text-black" href="MicrosoftIdentity/Account/EditProfile">
+                        <span class="oi oi-pencil" aria-hidden="true"></span> Edit Profile
+                    </NavLink>
+                    <NavLink class="nav-link text-black" href="MicrosoftIdentity/Account/SignOut">
+                        <span class="oi oi-account-logout" aria-hidden="true"></span> Logout
+                    </NavLink>
+                </Authorized>
+                <NotAuthorized>
+                    <NavLink class="nav-link text-black" href="MicrosoftIdentity/Account/SignIn">
+                        <span class="oi oi-account-login" aria-hidden="true"></span> Login
+                    </NavLink>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
     </nav>
 </div>
