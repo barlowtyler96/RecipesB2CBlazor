@@ -19,7 +19,7 @@ public class RecipeDto
     public string? Instructions { get; set; }
 
     [MaxLength(200)]
-    public string? ImagePath { get; set; }
+    public string? ImageUrl { get; set; }
 
     public bool IsFavorite { get; set; } = false;
 }

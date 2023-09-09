@@ -15,7 +15,7 @@ public class RecipeModel
     [Required]
     public string? Instructions { get; set; }
 
-    public string? ImagePath { get; set; }
+    public string? ImageUrl { get; set; }
 
     [Required]
     public List<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
