@@ -7,43 +7,45 @@
 
 @if (RecipesList is null)
 {
-    <div class="mt-5 text-xl text-center"><i class="fa fa-refresh"></i></div>
-    
-    
+    <div class="row">
+        <div class="mt-5 text-xl text-center"><i class="fa fa-refresh"></i></div>
+    </div>
 }
 else
 {
-    @foreach (var r in RecipesList)
-    {
-        <div class="col-sm-12 col-md-3 my-3 d-flex align-items-stretch justify-content-sm-center">
-            <div class="card border-1 border-dark">
-                <img src="@r.ImagePath" class="card-img-top card-sized-image" alt="Dish Image">
-                <div class="card-body">
-                    <h5 class="card-title text-center">@r.Name</h5>
-                    <p class="text-sm card-text">@r.Description</p>
-                </div>
-                <div class="card-footer">
-                    <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-outline-danger">View Full Recipe</button>
-                    <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn btn-outline-danger">
-                        @if (r.IsFavorite)
-                        {
-                            <span><i class="fa-solid fa-heart" style="color: #ff0000;"></i></span>
-                        }
-                        else
-                        {
-                            <i class="fa-regular fa-heart fa-lg" style="color: #ff0000;"></i>
-                        }
-                    </button>
+    <div class="row mb-3 mx-lg-4">
+        @foreach (var r in RecipesList)
+        {
+            <div class="col-sm-12 col-md-12 col-lg-3 mt-5 d-flex align-items-stretch justify-content-sm-center">
+                <div class="card border-1 border-dark">
+                    <img src="@r.ImageUrl" class="card-img-top card-sized-image" alt="Dish Image">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">@r.Name</h5>
+                        <p class="text-sm card-text">@r.Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-outline-danger">View Full Recipe</button>
+                        <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn btn-outline-danger">
+                            @if (r.IsFavorite)
+                            {
+                                <span><i class="fa-solid fa-heart" style="color: #ff0000;"></i></span>
+                            }
+                            else
+                            {
+                                <i class="fa-regular fa-heart fa-lg" style="color: #ff0000;"></i>
+                            }
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-
+        }
+    </div>
+    
     @if (ShowingRecipe)
     {
         <ViewRecipe RecipeId="@SelectedRecipeId" />
-        <div class="d-flex mb-5 justify-content-center">
-            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 my-3 shadow-lg">Hide</button>
+        <div class="text-center mb-5">
+            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 shadow-lg">Hide</button>
         </div>
     }
 }
@@ -60,7 +62,7 @@ else
         SelectedRecipeId = recipeId;
         ShowingRecipe = !ShowingRecipe;
 
-        await Task.Delay(500);
+        await Task.Delay(700);
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 

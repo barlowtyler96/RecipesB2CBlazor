@@ -1,11 +1,11 @@
 ﻿@using RecipesB2CBlazor.Helpers;
-@inject IRecipesService recipesService
+@inject IRecipesService _recipesService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 <div class="row justify-content-center pt-5">
     <div class="col-md-6 col-sm-12">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search recipes by keyword" aria-label="Search keyword" aria-describedby="search-button" @bind="@keyword">
+            <input type="text" class="form-control" placeholder="Search recipes" aria-label="Search keyword" aria-describedby="search-button" @bind="@keyword">
             <button class="btn btn-primary" type="button" id="search-button" @onclick="SearchForKeyword">Search</button>
         </div>
     </div>
@@ -25,7 +25,6 @@
             OnPageChanged="HandlePageChanged">
         </Pagination>
     </div>
-    
 }
 
 @code {
@@ -40,7 +39,7 @@
             {
                 return;
             }
-            recipesResponse = await recipesService.GetByKeyword(keyword, recipesResponse.CurrentPageNumber, recipesResponse.PageSize);
+            recipesResponse = await _recipesService.GetByKeyword(keyword, recipesResponse.CurrentPageNumber, recipesResponse.PageSize);
         }
         catch (Exception ex)
         {
@@ -52,7 +51,7 @@
     {
         try
         {
-            recipesResponse = await recipesService.GetByKeyword(keyword!, newPage, recipesResponse.PageSize);
+            recipesResponse = await _recipesService.GetByKeyword(keyword!, newPage, recipesResponse.PageSize);
         }
         catch (Exception ex)
         {

@@ -1,9 +1,26 @@
 ﻿@inject IUsersService usersService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
-@page "/favorites"
+@page "/yourcookbook"
+<PageTitle>Your Cookbook</PageTitle>
 @attribute [Authorize]
 
-<h3>Your Favorites</h3>
+
+
+<div class="container-fluid jumbotron-bg-img custom-font">
+    <div class="row align-items-center h-100 text-center">
+        <div class="col-md-6 col-sm-12 mx-auto">
+            <div class="card h-100 justify-content-center">
+                <h1 class="fw-bold text-center m-3">
+                    <AuthorizeView>
+                        <Authorized>
+                            @context.User.Claims.FirstOrDefault(c => c.Type.Contains("extension_FirstName"))?.Value's Kitchen
+                        </Authorized>
+                    </AuthorizeView>
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container-fluid">
     <div class="row justify-content-center">
@@ -27,9 +44,9 @@
             ConsentHandler.HandleException(ex);
         }
 
-        var favoriteRecipeIds = favoriteRecipesList.Select(f => f.RecipeId).ToList();
+        var favoriteRecipeIds = favoriteRecipesList!.Select(f => f.RecipeId).ToList();
 
-        foreach (var recipe in favoriteRecipesList)
+        foreach (var recipe in favoriteRecipesList!)
         {
             recipe.IsFavorite = favoriteRecipeIds.Contains(recipe.RecipeId);
         }
