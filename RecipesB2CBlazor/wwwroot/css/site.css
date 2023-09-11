@@ -6,14 +6,20 @@
     border-radius: 10px;
 }
 .view-recipe-card {
-    background-image: linear-gradient(180deg, #ff6a00a1 20%, #fff 90%);
+    background-image: url(/RecipeImages/banner.jpg)
 }
 .header {
-    background-image: linear-gradient(180deg, #ffd8009b 20%, #fff 90%);
+    background-image: url(/RecipeImages/banner.jpg)
 }
 .card-sized-image {
     width: 100%;
-    height: auto;
+    height: 17rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.card-footer-bg {
+    background-color: #6767673d;
 }
 .view-recipe-image {
     width: 100%;
@@ -46,6 +52,15 @@ a, .btn-link {
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
+.btn-custom-primary {
+    background-color: #00ffff38;
+    border-color: black;
+    color: black;
+}
+
+    .btn-custom-primary:hover {
+        background-color: white;
+    }
 .content {
     padding-top: 1.1rem;
 }
