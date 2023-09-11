@@ -16,23 +16,23 @@ else
     <div class="row mb-3 mx-lg-4">
         @foreach (var r in RecipesList)
         {
-            <div class="col-sm-12 col-md-12 col-lg-6 col-xl-3 mt-5 d-flex align-items-stretch justify-content-sm-center">
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3 mt-5 d-flex align-items-stretch justify-content-sm-center">
                 <div class="card ingredient-display">
                     <img src="@r.ImageUrl" class="card-img-top card-sized-image" alt="Dish Image">
-                    <div class="card-body">
+                    <div class="card-body card-bg">
                         <h5 class="card-title text-center">@r.Name</h5>
                         <p class="text-sm card-text">@r.Description</p>
                     </div>
-                    <div class="card-footer">
-                        <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-outline-danger">View Full Recipe</button>
-                        <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn btn-outline-danger">
+                    <div class="card-footer card-footer-bg">
+                        <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-custom-primary">View Full Recipe</button>
+                        <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn">
                             @if (r.IsFavorite)
                             {
-                                <span><i class="fa-solid fa-heart" style="color: #ff0000;"></i></span>
+                                <span><i class="fa-solid fa-heart" style="color: black;"></i></span>
                             }
                             else
                             {
-                                <i class="fa-regular fa-heart fa-lg" style="color: #ff0000;"></i>
+                                <i class="fa-regular fa-heart fa-lg" style="color: black;"></i>
                             }
                         </button>
                     </div>
@@ -62,7 +62,7 @@ else
         SelectedRecipeId = recipeId;
         ShowingRecipe = !ShowingRecipe;
 
-        await Task.Delay(700);
+        await Task.Delay(1200);
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 
