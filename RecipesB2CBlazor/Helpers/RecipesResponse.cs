@@ -6,7 +6,7 @@ public class RecipesResponse
 {
     public int TotalCount { get; set; }
 
-    public int PageSize { get; set; } = 6;
+    public int PageSize { get; set; } = 8;
 
     public int CurrentPageNumber { get; set; } = 1;
 
