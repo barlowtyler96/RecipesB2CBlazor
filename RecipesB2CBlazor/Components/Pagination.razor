@@ -1,12 +1,12 @@
 ﻿<div>
-    <button disabled="@IsFirstPage" @onclick="GoToFirstPage">First</button>
+    <button  disabled="@IsFirstPage" @onclick="GoToFirstPage">First</button>
     <button disabled="@IsFirstPage" @onclick="GoToPreviousPage">Previous</button>
-    <span>Page @CurrentPage of @TotalPages</span>
+    <span class ="text-white">Page @CurrentPage of @TotalPages</span>
     <button disabled="@IsLastPage" @onclick="GoToNextPage">Next</button>
     <button disabled="@IsLastPage" @onclick="GoToLastPage">Last</button>
 </div>
 <div> 
-    <span>Total Results: @TotalItems</span>
+    <span class ="text-white">Total Results: @TotalItems</span>
 </div>
 
 @code {
