@@ -45,6 +45,22 @@ public class UsersService : IUsersService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}.");
     }
 
+    public async Task<List<RecipeDto>> GetUserCreatedRecipesAsync()
+    {
+        await PrepareAuthenticatedClientForUser();
+
+        var response = await _httpClient.GetAsync($"{_usersBaseAddress}Users/myrecipes");
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            IEnumerable<RecipeDto> userCreatedRecipes = JsonConvert.DeserializeObject<IEnumerable<RecipeDto>>(content)!;
+
+            return userCreatedRecipes!.ToList();
+        }
+        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
+    }
+
     public async Task<bool> DeleteUserAsync(int id)
     {
         await PrepareAuthenticatedClientForUser();
