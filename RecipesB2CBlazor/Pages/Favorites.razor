@@ -1,8 +1,8 @@
-﻿@page "/yourcookbook"
+﻿@page "/favorites"
 @inject IUsersService usersService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @attribute [Authorize]
-<PageTitle>yo</PageTitle> 
+<PageTitle>Favorites</PageTitle> 
 
 <div class="container-fluid jumbotron-bg-img custom-font">
     <div class="row align-items-center h-100 text-center">
@@ -40,18 +40,14 @@
         {
             favoriteRecipesList = await usersService.GetUsersFavoritesAsync();
 
-            
+            foreach (var recipe in favoriteRecipesList!)
+            {
+                recipe.IsFavorite = true;
+            }
         }
         catch (Exception ex)
         {
             ConsentHandler.HandleException(ex);
-        }
-
-        var favoriteRecipeIds = favoriteRecipesList!.Select(f => f.RecipeId).ToList();
-
-        foreach (var recipe in favoriteRecipesList!)
-        {
-            recipe.IsFavorite = favoriteRecipeIds.Contains(recipe.RecipeId);
         }
     }
 }
