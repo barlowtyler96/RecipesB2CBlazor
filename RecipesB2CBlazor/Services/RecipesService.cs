@@ -126,9 +126,9 @@ public class RecipesService : IRecipesService
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var content = await response.Content.ReadAsStringAsync();
-            var recipes = JsonConvert.DeserializeObject<IEnumerable<RecipeModel>>(content);
+            var recipe = JsonConvert.DeserializeObject<RecipeModel>(content);
 
-            return recipes.FirstOrDefault();
+            return recipe;
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
