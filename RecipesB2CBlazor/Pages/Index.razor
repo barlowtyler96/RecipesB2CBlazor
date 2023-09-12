@@ -56,10 +56,9 @@
                 {
                     await _usersService.AddNewUserAsync();
                 }
-                // just get userfavorites here
+
                 userFavoritesIds = await _usersService.GetUserFavoriteIdsAsync();
 
-                // set IsFavorite Prop here based on userFavorites
                 foreach (var u in userFavoritesIds)
                 {
                     var matchingRecipe = recipesResponse.Data!.FirstOrDefault(r => r.RecipeId == u);
