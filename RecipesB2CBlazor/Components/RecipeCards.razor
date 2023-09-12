@@ -28,7 +28,7 @@ else
                         <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn">
                             @if (r.IsFavorite)
                             {
-                                <span><i class="fa-solid fa-heart" style="color: black;"></i></span>
+                                <i class="fa-solid fa-heart" style="color: black;"></i>
                             }
                             else
                             {
@@ -62,7 +62,7 @@ else
         SelectedRecipeId = recipeId;
         ShowingRecipe = !ShowingRecipe;
 
-        await Task.Delay(1200);
+        await Task.Delay(1000);
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 
