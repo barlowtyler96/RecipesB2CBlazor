@@ -1,0 +1,59 @@
+﻿@page "/yourshares"
+@inject IUsersService UsersService
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+@attribute [Authorize]
+<PageTitle>Your Shares</PageTitle>
+
+<div class="container-fluid jumbotron-bg-img custom-font">
+    <div class="row align-items-center h-100 text-center">
+        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 mx-auto">
+            <div class="ingredient-display header">
+                <h1 class="text-center m-3 p-3">
+                    <AuthorizeView>
+                        <Authorized>
+                            <i class="fa-solid fa-book"></i>
+                            @context.User.Claims.FirstOrDefault(c => c.Type.Contains("extension_FirstName"))?.Value's Cookbook
+                            <i class="fa-solid fa-book"></i>
+                        </Authorized>
+                        <NotAuthorized>
+                            NotAuthorized
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <RecipeCards RecipesList="@userCreatedRecipes" />
+    </div>
+</div>
+
+@code {
+    private List<RecipeDto>? userCreatedRecipes;
+    private List<int>? userFavoritesIds;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            userCreatedRecipes = await UsersService.GetUserCreatedRecipesAsync();
+
+            userFavoritesIds = await UsersService.GetUserFavoriteIdsAsync();
+            foreach (var u in userFavoritesIds)
+            {
+                var matchingRecipe = userCreatedRecipes!.FirstOrDefault(r => r.RecipeId == u);
+                if (matchingRecipe != null)
+                {
+                    matchingRecipe.IsFavorite = true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+    }
+}
