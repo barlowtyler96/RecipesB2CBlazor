@@ -1,6 +1,6 @@
-﻿@inject IRecipesService _recipesService
-@inject IUsersService _usersService
-@inject AuthenticationStateProvider _authenticationStateProvider
+﻿@inject IRecipesService RecipesService
+@inject IUsersService UsersService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @page "/"
 @using RecipesB2CBlazor.Helpers;
@@ -12,9 +12,9 @@
 <div class="container-fluid custom-font">
     <div class="row align-items-center h-100 text-center">
         <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 mx-auto">
-            <div class="ingredient-display header">
+            <div class="header">
                 <h1 class="text-center m-3 p-3">
-                    <i class="fa-regular fa-clock"></i> Recently Added <i class="fa-regular fa-clock"></i>
+                    Recently Added
                 </h1>
             </div>
         </div>
@@ -43,21 +43,21 @@
 @code {
     private RecipesResponse recipesResponse = new RecipesResponse();
     private List<int>? userFavoritesIds;
-    private bool isAuthenticated => _authenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity!.IsAuthenticated;
+    private bool isAuthenticated => AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity!.IsAuthenticated;
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            recipesResponse = await _recipesService.GetRecentsAsync(recipesResponse.CurrentPageNumber, recipesResponse.PageSize);
+            recipesResponse = await RecipesService.GetRecentsAsync(recipesResponse.CurrentPageNumber, recipesResponse.PageSize);
 
             if (isAuthenticated)
             {
-                if (_authenticationStateProvider.GetAuthenticationStateAsync().Result.User.Claims.Any(c => c.Type == "newUser" && c.Value == "true"))
+                if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Claims.Any(c => c.Type == "newUser" && c.Value == "true"))
                 {
-                    await _usersService.AddNewUserAsync();
+                    await UsersService.AddNewUserAsync();
                 }
 
-                userFavoritesIds = await _usersService.GetUserFavoriteIdsAsync();
+                userFavoritesIds = await UsersService.GetUserFavoriteIdsAsync();
 
                 foreach (var u in userFavoritesIds)
                 {
@@ -79,7 +79,7 @@
     {
         try
         {
-            recipesResponse = await _recipesService.GetRecentsAsync(newPage, recipesResponse.PageSize);
+            recipesResponse = await RecipesService.GetRecentsAsync(newPage, recipesResponse.PageSize);
         }
         catch (Exception ex)
         {
