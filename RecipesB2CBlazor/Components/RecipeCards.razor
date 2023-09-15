@@ -1,8 +1,6 @@
-﻿@inject IRecipesService _recipesService
-@inject IUsersService _usersService
+﻿@inject IRecipesService RecipesService
+@inject IUsersService UsersService
 @inject IJSRuntime JSRuntime
-@inject IHttpContextAccessor _httpContextAccessor
-@inject AuthenticationStateProvider _authenticationStateProvider
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 @if (RecipesList is null)
@@ -25,10 +23,10 @@ else
                     </div>
                     <div class="card-footer card-footer-bg">
                         <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-custom-primary">View Full Recipe</button>
-                        <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn">
+                        <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn btn-custom-primary">
                             @if (r.IsFavorite)
                             {
-                                <i class="fa-solid fa-heart" style="color: black;"></i>
+                                <i class="fa-solid fa-heart fa-lg" style="color: black;"></i>
                             }
                             else
                             {
@@ -55,7 +53,7 @@ else
     public List<RecipeDto>? RecipesList { get; set; }
     private int SelectedRecipeId { get; set; }
     private bool ShowingRecipe { get; set; } = false;
-    private bool IsAuthenticated => _authenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated;
+    
 
     private async Task ShowRecipe(int recipeId)
     {
@@ -68,25 +66,23 @@ else
 
     private async Task ToggleFavoriteRecipe(int recipeId, bool isFavorite)
     {
+        var recipe = new RecipeDto();
 
-        var recipe = RecipesList.FirstOrDefault(r => r.RecipeId == recipeId);
-
-        if (recipe != null)
+        if (RecipesList != null)
         {
+            recipe = RecipesList.FirstOrDefault(r => r.RecipeId == recipeId);
             try
             {
                 if (!isFavorite)
                 {
-                    await _usersService.AddUserFavoriteAsync(recipeId);
-                    recipe.IsFavorite = true;
+                    await UsersService.AddUserFavoriteAsync(recipeId);
+                    recipe!.IsFavorite = true;
                 }
                 else
                 {
-                    await _usersService.DeleteUserFavoriteAsync(recipeId);
-                    recipe.IsFavorite = false;
+                    await UsersService.DeleteUserFavoriteAsync(recipeId);
+                    recipe!.IsFavorite = false;
                 }
-
-                StateHasChanged();
             }
             catch (Exception ex)
             {
