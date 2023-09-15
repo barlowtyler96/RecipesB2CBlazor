@@ -1,5 +1,5 @@
 ﻿@page "/favorites"
-@inject IUsersService usersService
+@inject IUsersService UsersService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @attribute [Authorize]
 <PageTitle>Favorites</PageTitle> 
@@ -11,9 +11,7 @@
                 <h1 class="text-center m-3 p-3">
                     <AuthorizeView>
                         <Authorized>
-                            <i class="fa-solid fa-book"></i>
-                            @context.User.Claims.FirstOrDefault(c => c.Type.Contains("extension_FirstName"))?.Value's Cookbook
-                            <i class="fa-solid fa-book"></i>
+                            @context.User.Claims.FirstOrDefault(c => c.Type.Contains("extension_FirstName"))?.Value's Favorites
                         </Authorized>
                         <NotAuthorized>
                             NotAuthorized
@@ -26,9 +24,7 @@
 </div>
 
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <RecipeCards RecipesList="@favoriteRecipesList" />
-    </div>
+    <RecipeCards RecipesList="@favoriteRecipesList" />
 </div>
 
 @code {
@@ -38,7 +34,7 @@
     {
         try
         {
-            favoriteRecipesList = await usersService.GetUsersFavoritesAsync();
+            favoriteRecipesList = await UsersService.GetUsersFavoritesAsync();
 
             foreach (var recipe in favoriteRecipesList!)
             {

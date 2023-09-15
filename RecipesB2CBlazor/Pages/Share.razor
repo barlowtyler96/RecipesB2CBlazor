@@ -1,9 +1,8 @@
 ﻿@page "/share"
 <PageTitle>Share</PageTitle>
 @attribute [Authorize]
-@inject IConfiguration _config
-@inject IBlobStorageService _blobStorageService
-@inject IRecipesService _recipesService
+@inject IBlobStorageService BlobStorageService
+@inject IRecipesService RecipesService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 <div class="container-fluid jumbotron-bg-img custom-font">
@@ -74,7 +73,7 @@
     <div class="row mt-3">
         <div class="col-sm-12">
             <label>
-                <InputFile class="form-control" disabled="@fileLoading" OnChange="@OnInputFileChange" single />
+                <InputFile class="form-control" accept=".jpg, .png, .jpeg" disabled="@fileLoading" OnChange="@OnInputFileChange" single />
                 <div class="form-text">*Optional*</div>
             </label>
             @if (fileLoading)
@@ -156,7 +155,7 @@
                 Path.GetRandomFileName(),
                 Path.GetExtension(selectedFile!.Name)
             );
-            var blobUrl = await _blobStorageService.UploadFileToBlobAsync(newFileName, selectedFile.ContentType, selectedFile.OpenReadStream(maxFileSize));
+            var blobUrl = await BlobStorageService.UploadFileToBlobAsync(newFileName, selectedFile.ContentType, selectedFile.OpenReadStream(maxFileSize));
             recipeModel.ImageUrl = blobUrl;
         }
         catch (Exception ex)
@@ -175,7 +174,7 @@
             {
                 await OnUploadSubmit();
             }
-            createdRecipeId = await _recipesService.AddAsync(recipeModel);
+            createdRecipeId = await RecipesService.AddAsync(recipeModel);
 
             RecipeDto recipeDto = new RecipeDto
             {

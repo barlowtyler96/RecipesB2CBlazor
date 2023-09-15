@@ -1,4 +1,4 @@
-﻿@inject IRecipesService recipesService
+﻿@inject IRecipesService RecipesService
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 
@@ -51,7 +51,7 @@ else if (recipe.RecipeId == RecipeId)
     {
         try
         {
-            recipe = await recipesService.GetAsync(RecipeId);
+            recipe = await RecipesService.GetAsync(RecipeId);
 
             var halfCount = recipe.RecipeIngredients.Count / 2;
 
