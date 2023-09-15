@@ -2,17 +2,15 @@
 using Newtonsoft.Json;
 using RecipesB2CBlazor.Helpers;
 using RecipesB2CBlazor.Models;
-using System.Drawing.Printing;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace RecipesB2CBlazor.Services;
 
 public static class RecipesServiceExtensions
 {
-    public static void AddRecipesService(this IServiceCollection services, IConfiguration configuration)
+    public static void AddRecipesService(this IServiceCollection services)
     {
         services.AddHttpClient<IRecipesService, RecipesService>();
     }

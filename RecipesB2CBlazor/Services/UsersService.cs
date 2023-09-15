@@ -3,13 +3,12 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using RecipesB2CBlazor.Models;
 using System.Net;
-using System.Text;
 
 namespace RecipesB2CBlazor.Services;
 
 public static class UsersServiceExtensions
 {
-    public static void AddUsersService(this IServiceCollection services, IConfiguration configuration)
+    public static void AddUsersService(this IServiceCollection services)
     {
         services.AddHttpClient<IUsersService, UsersService>();
     }
@@ -78,11 +77,9 @@ public class UsersService : IUsersService
     {
         await PrepareAuthenticatedClientForUser();
 
-        var jsonRequest = JsonConvert.SerializeObject(recipeId); 
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_usersBaseAddress}Users/favorite/{recipeId}");
 
-        var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsync($"{_usersBaseAddress}Users/favorite", jsonContent);
+        var response = await _httpClient.SendAsync(request);
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
