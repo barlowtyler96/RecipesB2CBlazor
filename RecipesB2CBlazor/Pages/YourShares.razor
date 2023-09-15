@@ -11,9 +11,7 @@
                 <h1 class="text-center m-3 p-3">
                     <AuthorizeView>
                         <Authorized>
-                            <i class="fa-solid fa-book"></i>
-                            @context.User.Claims.FirstOrDefault(c => c.Type.Contains("extension_FirstName"))?.Value's Cookbook
-                            <i class="fa-solid fa-book"></i>
+                            @context.User.Claims.FirstOrDefault(c => c.Type.Contains("extension_FirstName"))?.Value's Shares
                         </Authorized>
                         <NotAuthorized>
                             NotAuthorized
@@ -26,9 +24,7 @@
 </div>
 
 <div class="container-fluid">
-    <div class="row justify-content-center">
-        <RecipeCards RecipesList="@userCreatedRecipes" />
-    </div>
+    <RecipeCards RecipesList="@userCreatedRecipes" />
 </div>
 
 @code {
