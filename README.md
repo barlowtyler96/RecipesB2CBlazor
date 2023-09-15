@@ -19,9 +19,9 @@
 * User password resetting
 * Page-specific Authorization
 * Web API consumption
-* Ability for users with an account to submit recipes
-* Ability for users to favorite recipes
-* Server-Side paging for pagination component
+* Users with accounts can share recipes
+* Users with accounts can favorite recipes
+* Server-Side paging for pagination components
 
 
 ## Database Schema
