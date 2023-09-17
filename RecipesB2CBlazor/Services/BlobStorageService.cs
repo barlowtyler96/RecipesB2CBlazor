@@ -30,4 +30,22 @@ public class BlobStorageService : IBlobStorageService
             throw;
         }
     }
+
+    public async Task<bool> DeleteFileToBlobAsync(string strFileName)
+    {
+        try
+        {
+            var container = new BlobContainerClient(blobStorageconnection, blobContainerName);
+            var createResponse = await container.CreateIfNotExistsAsync();
+            if (createResponse != null && createResponse.GetRawResponse().Status == 201)
+                await container.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+            var blob = container.GetBlobClient(strFileName);
+            await blob.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 }
