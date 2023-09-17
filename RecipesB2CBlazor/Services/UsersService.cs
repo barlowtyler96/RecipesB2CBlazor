@@ -60,19 +60,6 @@ public class UsersService : IUsersService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
 
-    public async Task<bool> DeleteUserAsync(int id)
-    {
-        await PrepareAuthenticatedClientForUser();
-
-        var response = await _httpClient.DeleteAsync($"{_usersBaseAddress}User/{id}");
-
-        if (response.StatusCode == HttpStatusCode.OK)
-        {
-            return response.IsSuccessStatusCode;
-        }
-        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}.");
-    }
-
     public async Task<bool> AddUserFavoriteAsync(int recipeId)
     {
         await PrepareAuthenticatedClientForUser();
