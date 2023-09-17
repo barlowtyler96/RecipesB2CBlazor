@@ -130,6 +130,7 @@
     private int createdRecipeId;
     private bool hasSubmitted = false;
     private bool fileLoading;
+    private string? newFileName;
     private List<string> errors = new();
     private IBrowserFile? selectedFile;
 
@@ -151,7 +152,7 @@
         fileLoading = true;
         try
         {
-            var newFileName = Path.ChangeExtension(
+            newFileName = Path.ChangeExtension(
                 Path.GetRandomFileName(),
                 Path.GetExtension(selectedFile!.Name)
             );
@@ -189,8 +190,28 @@
         }
         catch (Exception ex)
         {
-            errors.Add($"{ex.Message}");
+            if (ex.Message == "Invalid status code in the HttpResponseMessage: TooManyRequests.")
+            {
+                errors.Add("You may only submit 3 recipes per 24hrs.");
+            }
+            else
+            {
+                errors.Add($"{ex.Message}");
+            }
         }
+
+        try
+        {
+            if (addedRecipesList.Count <= 0)
+            {
+                await BlobStorageService.DeleteFileToBlobAsync(newFileName!);
+            }
+        }
+        catch(Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+
     }
 
     private void AddRecipeIngredient()
