@@ -39,7 +39,7 @@ public class RecipesService : IRecipesService
         var jsonRequest = JsonConvert.SerializeObject(recipeModel);
         var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
-        var response = await this._httpClient.PostAsync($"{_recipesBaseAddress}Users/share", jsonContent);
+        var response = await _httpClient.PostAsync($"{_recipesBaseAddress}Users/share", jsonContent);
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
@@ -56,7 +56,7 @@ public class RecipesService : IRecipesService
     {
         await PrepareAuthenticatedClientForApp();
 
-        var response = await this._httpClient.DeleteAsync($"{_recipesBaseAddress}Recipes/{id}");
+        var response = await _httpClient.DeleteAsync($"{_recipesBaseAddress}Recipes/{id}");
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
@@ -119,7 +119,7 @@ public class RecipesService : IRecipesService
 
     public async Task<RecipeModel> GetAsync(int id)
     {
-        var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/id/{id}");
+        var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/{id}");
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
