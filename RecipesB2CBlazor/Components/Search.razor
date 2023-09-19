@@ -5,11 +5,12 @@
 <div class="row justify-content-center pt-5">
     <div class="col-md-6 col-sm-12">
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search recipes" aria-label="Search keyword" aria-describedby="search-button" @bind="@keyword">
+            <input type="text" class="form-control" placeholder="Search recipes" aria-label="Search keyword" aria-describedby="search-button" @bind="@keyword" @onkeyup="OnKeyUp">
             <button class="btn btn-primary" type="button" id="search-button" @onclick="SearchForKeyword">Search</button>
         </div>
     </div>
 </div>
+
 
 @if (recipesResponse.Data is not null)
 {
@@ -56,6 +57,14 @@
         catch (Exception ex)
         {
             ConsentHandler.HandleException(ex);
+        }
+    }
+
+    private async Task OnKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SearchForKeyword(); 
         }
     }
 }
