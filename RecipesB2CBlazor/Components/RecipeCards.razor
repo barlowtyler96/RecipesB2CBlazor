@@ -60,7 +60,7 @@ else
         SelectedRecipeId = recipeId;
         ShowingRecipe = !ShowingRecipe;
 
-        await Task.Delay(1000);
+        await Task.Delay(500);
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 
