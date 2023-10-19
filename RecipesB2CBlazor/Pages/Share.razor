@@ -1,8 +1,8 @@
 ﻿@page "/share"
 <PageTitle>Share</PageTitle>
-@attribute [Authorize]
 @inject IBlobStorageService BlobStorageService
 @inject IRecipesService RecipesService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 <div class="container-fluid jumbotron-bg-img custom-font">
@@ -99,6 +99,15 @@
                 </div>
             </div>
         }
+        else if(errors.Count <= 0 && !isAuthenticated)
+        {
+            <div class="col-12 mt-3">
+                <div class="col-md-12">
+                    <button type="submit" class="btn disabled btn-primary w-100">Submit</button>
+                    <div class="alert alert-danger mt-4">You must <a href="MicrosoftIdentity/Account/SignIn">sign in</a> to share a recipe.</div>
+                </div>
+            </div>
+        }
         else
         {
             <div class="col-12 mt-3">
@@ -133,6 +142,7 @@
     private string? newFileName;
     private List<string> errors = new();
     private IBrowserFile? selectedFile;
+    private bool isAuthenticated => AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity!.IsAuthenticated;
 
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
