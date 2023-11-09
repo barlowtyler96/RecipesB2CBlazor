@@ -28,7 +28,7 @@
 ![](ReadMeImages/culinaryshares-entity-relationship.PNG)
 
 ## Sample Video: 
-[![Sample Video](https://img.youtube.com/vi/uoZnfllinzE/0.jpg)](https://www.youtube.com/watch?v=_8VXPkA6Rto)
+[![Sample Video](https://img.youtube.com/vi/_8VXPkA6Rto/0.jpg)](https://www.youtube.com/watch?v=_8VXPkA6Rto)
 
 
 
