@@ -1,6 +1,6 @@
 # Culinary Shares Blazor App
 
-#### This is a project I created to practice authentication/authorization, front end design, as well as consuming APIs. I used Azure AD B2C to allow users to create an account and sign in. It also allows users to edit their profile and reset their password. If a user creates an account, they can submit a recipe for review before being added to the site. Users also has the ability to favorite recipes. 
+#### This is a project I created to practice authentication/authorization, front end design, as well as consuming APIs. I used Azure AD B2C to allow users to create an account and sign in. It also allows users to edit their profile and reset their password. If a user creates an account, they can submit a recipe for review before being added to the site. Users also have the ability to favorite recipes. 
 
 #### I used Microsoft's documentation & code examples, Stack Overflow, and ChatGPT to complete the project. The biggest challenge I faced was learning how to implement Azures auth systems.
 
