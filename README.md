@@ -18,9 +18,9 @@
 * User password resetting
 * Page-specific Authorization
 * Web API consumption
-* Users with accounts can share recipes
-* Users with accounts can favorite recipes
-* Server-Side paging for pagination components
+* Users can share recipes
+* Users can favorite recipes
+* Server-Side paging for pagination component
 
 
 ## Database Schema
@@ -28,6 +28,12 @@
 
 ## Sample Video: 
 [![Sample Video](https://img.youtube.com/vi/_8VXPkA6Rto/0.jpg)](https://www.youtube.com/watch?v=_8VXPkA6Rto)
+
+## Want to contribute?
+1. Open Git Bash to the location you wish to clone the repository.
+2. Run the following command: git clone https://github.com/barlowtyler96/RecipesB2CBlazor.git
+
+
 
 
 
