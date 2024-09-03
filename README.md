@@ -11,7 +11,6 @@
 * OpenID Connect
 * Razor Components
 * Razor Syntax
-* Minimal Vanilla Javascript
 
 ## Features: 
 * User account creation
