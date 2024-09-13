@@ -31,7 +31,18 @@
 
 ## Want to contribute?
 1. Open Git Bash to the location you wish to clone the repository.
-2. Run the following command: git clone https://github.com/barlowtyler96/RecipesB2CBlazor.git
+2. Run the following command:
+   ```git clone https://github.com/barlowtyler96/RecipesB2CBlazor.git```
+4. Create a new branch:
+   ```git checkout -b your-branch-name```
+6. Make changes and stage them:
+   ```git add .```
+7. Commit your changes:
+   ```git commit -m "Brief description of the changes"```
+8. Push your changes
+   ```git push origin your-branch-name```
+9. Submit a pull request
+
 
 
 
