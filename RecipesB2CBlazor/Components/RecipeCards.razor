@@ -22,17 +22,23 @@ else
                         <p class="text-sm card-text">@r.Description</p>
                     </div>
                     <div class="card-footer card-footer-bg">
-                        <button @onclick="(() => ShowRecipe(r.RecipeId))" class="btn btn-custom-primary">View Full Recipe</button>
-                        <button @onclick="(() => ToggleFavoriteRecipe(r.RecipeId, r.IsFavorite))" class="btn btn-custom-primary">
-                            @if (r.IsFavorite)
+                        <button @onclick="(() => ShowRecipe(r.Id))" class="btn btn-custom-primary">View Full Recipe</button>
+                        @foreach(var uf in UserFavorites)
+                        {
+                            @if (r.Id == uf)
                             {
+                                <button @onclick="(() => DeleteFavoriteRecipe(r.Id))" class="btn btn-custom-primary">
+                                </button>
                                 <i class="fa-solid fa-heart fa-lg" style="color: black;"></i>
                             }
                             else
                             {
+                                <button @onclick="(() => AddFavoriteRecipe(r.Id))" class="btn btn-custom-primary">
+                                </button>
                                 <i class="fa-regular fa-heart fa-lg" style="color: black;"></i>
                             }
-                        </button>
+                            
+                        }
                     </div>
                 </div>
             </div>
@@ -50,10 +56,12 @@ else
 
 @code {
     [Parameter]
-    public List<RecipeDto>? RecipesList { get; set; }
+    public List<Recipe>? RecipesList { get; set; }
+    [Parameter]
+    public List<int> UserFavorites { get; set; } = new List<int>();
     private int SelectedRecipeId { get; set; }
     private bool ShowingRecipe { get; set; } = false;
-    
+
 
     private async Task ShowRecipe(int recipeId)
     {
@@ -64,30 +72,14 @@ else
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 
-    private async Task ToggleFavoriteRecipe(int recipeId, bool isFavorite)
+    private async Task DeleteFavoriteRecipe(int recipeId)
     {
-        var recipe = new RecipeDto();
+        await UsersService.DeleteUserFavoriteAsync(recipeId);
 
-        if (RecipesList != null)
-        {
-            recipe = RecipesList.FirstOrDefault(r => r.RecipeId == recipeId);
-            try
-            {
-                if (!isFavorite)
-                {
-                    await UsersService.AddUserFavoriteAsync(recipeId);
-                    recipe!.IsFavorite = true;
-                }
-                else
-                {
-                    await UsersService.DeleteUserFavoriteAsync(recipeId);
-                    recipe!.IsFavorite = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                ConsentHandler.HandleException(ex);
-            }
-        }
+    }
+    private async Task AddFavoriteRecipe( int recipeId)
+    {
+        await UsersService.AddUserFavoriteAsync(recipeId);
+
     }
 }

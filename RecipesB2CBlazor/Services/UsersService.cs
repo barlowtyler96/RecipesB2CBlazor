@@ -44,7 +44,7 @@ public class UsersService : IUsersService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}.");
     }
 
-    public async Task<List<RecipeDto>> GetUserCreatedRecipesAsync()
+    public async Task<List<Recipe>> GetUserCreatedRecipesAsync()
     {
         await PrepareAuthenticatedClientForUser();
 
@@ -53,9 +53,24 @@ public class UsersService : IUsersService
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var content = await response.Content.ReadAsStringAsync();
-            IEnumerable<RecipeDto> userCreatedRecipes = JsonConvert.DeserializeObject<IEnumerable<RecipeDto>>(content)!;
+            IEnumerable<Recipe> userCreatedRecipes = JsonConvert.DeserializeObject<IEnumerable<Recipe>>(content)!;
 
             return userCreatedRecipes!.ToList();
+        }
+        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
+    }
+    public async Task<List<Recipe>> GetUserFavoriteRecipesAsync()
+    {
+        await PrepareAuthenticatedClientForUser();
+
+        var response = await _httpClient.GetAsync($"{_usersBaseAddress}Users/favorites");
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            IEnumerable<Recipe> userFavoriteRecipes = JsonConvert.DeserializeObject<IEnumerable<Recipe>>(content)!;
+
+            return userFavoriteRecipes!.ToList();
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
@@ -88,32 +103,16 @@ public class UsersService : IUsersService
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}.");
     }
 
-    public async Task<List<RecipeDto>> GetUsersFavoritesAsync()
+    public async Task<List<int>> GetUserFavoritesAsync()
     {
-        await PrepareAuthenticatedClientForUser();
+        //await PrepareAuthenticatedClientForUser();
 
         var response = await _httpClient.GetAsync($"{_usersBaseAddress}Users/favorites");
 
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var content = await response.Content.ReadAsStringAsync();
-            IEnumerable<RecipeDto> userFavorites = JsonConvert.DeserializeObject<IEnumerable<RecipeDto>>(content);
-
-            return userFavorites.ToList();
-        }
-        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
-    }
-
-    public async Task<List<int>> GetUserFavoriteIdsAsync()
-    {
-        await PrepareAuthenticatedClientForUser();
-
-        var response = await _httpClient.GetAsync($"{_usersBaseAddress}Users/favoritesIds");
-
-        if (response.StatusCode == HttpStatusCode.OK)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            IEnumerable<int> userFavorites = JsonConvert.DeserializeObject<IEnumerable<int>>(content);
+            IEnumerable<int> userFavorites = JsonConvert.DeserializeObject<IEnumerable<int>>(content)!;
 
             return userFavorites.ToList();
         }

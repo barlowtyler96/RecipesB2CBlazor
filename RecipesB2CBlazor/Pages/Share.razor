@@ -38,24 +38,25 @@
         </div>
     </div>
 
-    @foreach (var recipeIngredient in recipeModel.RecipeIngredients)
+    @foreach (var ingredient in recipeModel.Ingredients)
     {
         <div class="row mt-3">
             <div class="col-3">
-                <label class="text-lg">Amount:</label>
-                <InputNumber @bind-Value="recipeIngredient.Amount" class="form-control" />
+                <label class="text-lg">Name:</label>
+                <InputText @bind-Value="ingredient.Name" class="form-control" />
+            </div>
+            <div class="col-4">
+                <label class="text-lg">Amount</label>
+                <InputNumber @bind-Value="ingredient.Amount" class="form-control" />
             </div>
             <div class="col-4">
                 <label class="text-lg">Unit:</label>
-                <InputText @bind-Value="recipeIngredient.Unit" class="form-control" />
+                <InputText @bind-Value="ingredient.Unit" class="form-control" />
                 <div class="form-text">*May be left empty if necessary.*</div>
             </div>
-            <div class="col-4">
-                <label class="text-lg">Ingredient:</label>
-                <InputText @bind-Value="recipeIngredient.IngredientName" class="form-control" />
-            </div>
+            
             <div class="col-1 d-flex align-items-center justify-content-center">
-                <div class="btn" @onclick="() => RemoveRecipeIngredient(recipeIngredient)">
+                <div class="btn" @onclick="() => RemoveRecipeIngredient(ingredient)">
                     <i class="fa-solid fa-trash-can fa-lg" style="color: #d63d3d;"></i>
                 </div>
             </div>
@@ -133,8 +134,8 @@
 
 
 @code {
-    private RecipeModel recipeModel = new RecipeModel();
-    private List<RecipeDto> addedRecipesList = new();
+    private Recipe recipeModel = new Recipe();
+    private List<Recipe> addedRecipesList = new();
     private const long maxFileSize = 1024 * 1024 * 3;
     private int createdRecipeId;
     private bool hasSubmitted = false;
@@ -187,9 +188,9 @@
             }
             createdRecipeId = await RecipesService.AddAsync(recipeModel);
 
-            RecipeDto recipeDto = new RecipeDto
+            Recipe recipeDto = new Recipe
             {
-                RecipeId = createdRecipeId,
+                Id = createdRecipeId,
                 Name = recipeModel.Name,
                 Description = recipeModel.Description,
                 ImageUrl = recipeModel.ImageUrl
@@ -226,11 +227,11 @@
 
     private void AddRecipeIngredient()
     {
-        recipeModel.RecipeIngredients.Add(new RecipeIngredient());
+        recipeModel.Ingredients.Add(new Ingredient());
     }
 
-    private void RemoveRecipeIngredient(RecipeIngredient ingredientToRemove)
+    private void RemoveRecipeIngredient(Ingredient ingredientToRemove)
     {
-        recipeModel.RecipeIngredients.Remove(ingredientToRemove);
+        recipeModel.Ingredients.Remove(ingredientToRemove);
     }
 }

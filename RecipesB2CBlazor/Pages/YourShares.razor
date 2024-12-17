@@ -28,8 +28,7 @@
 </div>
 
 @code {
-    private List<RecipeDto>? userCreatedRecipes;
-    private List<int>? userFavoritesIds;
+    private List<Recipe>? userCreatedRecipes;
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,15 +36,6 @@
         {
             userCreatedRecipes = await UsersService.GetUserCreatedRecipesAsync();
 
-            userFavoritesIds = await UsersService.GetUserFavoriteIdsAsync();
-            foreach (var u in userFavoritesIds)
-            {
-                var matchingRecipe = userCreatedRecipes!.FirstOrDefault(r => r.RecipeId == u);
-                if (matchingRecipe != null)
-                {
-                    matchingRecipe.IsFavorite = true;
-                }
-            }
         }
         catch (Exception ex)
         {

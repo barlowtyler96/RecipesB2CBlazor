@@ -24,22 +24,19 @@
 </div>
 
 <div class="container-fluid">
-    <RecipeCards RecipesList="@favoriteRecipesList" />
+    <RecipeCards RecipesList="@favoriteRecipes" />
 </div>
 
 @code {
-    private List<RecipeDto>? favoriteRecipesList;
+    private List<int>? userFavorites;
+    private List<Recipe> favoriteRecipes;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            favoriteRecipesList = await UsersService.GetUsersFavoritesAsync();
-
-            foreach (var recipe in favoriteRecipesList!)
-            {
-                recipe.IsFavorite = true;
-            }
+            userFavorites = await UsersService.GetUserFavoritesAsync();
+            favoriteRecipes = await UsersService.GetUserFavoriteRecipesAsync();
         }
         catch (Exception ex)
         {

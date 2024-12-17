@@ -24,7 +24,7 @@
 @if (recipesResponse.Data is not null)
 {
     <div class="container-fluid">
-        <RecipeCards RecipesList="@recipesResponse.Data" />
+        <RecipeCards UserFavorites="@userFavorites" RecipesList="@recipesResponse.Data" />
     </div>
     <div class="container-fluid">
         <div class="row py-3 text-center">
@@ -39,32 +39,14 @@
 
 @code {
     private RecipesResponse recipesResponse = new RecipesResponse();
-    private List<int>? userFavoritesIds;
-    private bool isAuthenticated => AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity!.IsAuthenticated;
+    private List<int> userFavorites = new List<int>();
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
             recipesResponse = await RecipesService.GetRecentsAsync(recipesResponse.CurrentPageNumber, recipesResponse.PageSize);
-
-            if (isAuthenticated)
-            {
-                if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Claims.Any(c => c.Type == "newUser" && c.Value == "true"))
-                {
-                    await UsersService.AddNewUserAsync();
-                }
-
-                userFavoritesIds = await UsersService.GetUserFavoriteIdsAsync();
-
-                foreach (var u in userFavoritesIds)
-                {
-                    var matchingRecipe = recipesResponse.Data!.FirstOrDefault(r => r.RecipeId == u);
-                    if (matchingRecipe != null)
-                    {
-                        matchingRecipe.IsFavorite = true;
-                    }
-                }
-            }
+            //userFavorites = await UsersService.GetUserFavoritesAsync();
         }
         catch (Exception ex)
         {
