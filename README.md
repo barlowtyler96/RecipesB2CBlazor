@@ -5,21 +5,17 @@
 #### I used Microsoft's documentation & code examples, Stack Overflow, and ChatGPT to complete the project.
 
 ## Technologies used: 
+* Blazor Server
 * Bootstrap 5
 * Azure AD B2C
-* OAuth 2.0
-* OpenID Connect
 * Razor Components
-* Razor Syntax
 
 ## Features: 
 * User account creation
 * User account editing
-* User password resetting
-* Page-specific Authorization
-* Web API consumption
 * Users can share recipes
 * Users can favorite recipes
+* Web API consumption
 * Server-Side paging for pagination component
 
 
