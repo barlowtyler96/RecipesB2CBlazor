@@ -38,7 +38,7 @@
 }
 
 @code {
-    private RecipesResponse recipesResponse = new RecipesResponse();
+    private PaginationResponse<Recipe> recipesResponse = new ();
     private List<int> userFavorites = new List<int>();
 
     protected override async Task OnInitializedAsync()

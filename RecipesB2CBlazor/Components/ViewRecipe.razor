@@ -6,7 +6,7 @@
 {
     <div class="text-xxl text-center">Loading...</div>
 }
-else if (recipe.Id == RecipeId)
+else if (recipe != null)
 {
     <div class="row bg-custom-primary ingredient-display view-recipe-card my-5 pb-5 mx-lg-3 mx-1" id="viewrecipe">
         <div class="col-12 text-xl fw-bold text-center mt-4">
@@ -41,9 +41,8 @@ else if (recipe.Id == RecipeId)
 
 
 @code {
-    private Recipe? recipe;
     [Parameter]
-    public int RecipeId { get; set; }
+    public Recipe recipe { get; set; }
     List<Ingredient> firstHalfIngredients = new();
     List<Ingredient> secondHalfIngredients = new();
 
@@ -51,7 +50,6 @@ else if (recipe.Id == RecipeId)
     {
         try
         {
-            recipe = await RecipesService.GetAsync(RecipeId);
 
             var halfCount = recipe.Ingredients.Count / 2;
 

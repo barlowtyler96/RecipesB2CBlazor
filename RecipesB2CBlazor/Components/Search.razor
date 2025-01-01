@@ -30,7 +30,7 @@
 
 @code {
     private string? keyword { get; set; }
-    private RecipesResponse recipesResponse = new RecipesResponse();
+    private PaginationResponse<Recipe> recipesResponse = new();
 
     private async Task SearchForKeyword()
     {

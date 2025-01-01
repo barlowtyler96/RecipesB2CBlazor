@@ -32,7 +32,54 @@ public class RecipesService : IRecipesService
         _recipesBaseAddress = configuration["DownstreamApi:BaseUrl"];
     }
 
-    public async Task<int> AddAsync(Recipe recipeModel)
+    public async Task<PaginationResponse<Recipe>> GetRecentsAsync(int page, int pageSize)
+    {
+        string uri = _recipesBaseAddress + "recipes" + "?page=" + page + "&pageSize=" + pageSize;
+
+        var response = await _httpClient.GetAsync(uri);
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+
+            var recipesResponse = JsonConvert.DeserializeObject<PaginationResponse<Recipe>>(content);
+
+            return recipesResponse;
+        }
+        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
+    }
+
+    public async Task<Recipe> GetByIdAsync(int id)
+    {
+        var response = await _httpClient.GetAsync($"{_recipesBaseAddress}recipes/{id}");
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var recipe = JsonConvert.DeserializeObject<Recipe>(content);
+
+            return recipe;
+        }
+        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
+    }
+
+    public async Task<PaginationResponse<Recipe>> GetByKeyword(string keyword, int page, int pageSize)
+    {
+        string uri = _recipesBaseAddress + "recipes/search" + "?keyword=" + WebUtility.UrlEncode(keyword) + "&page=" + page + "&pageSize=" + pageSize;
+
+        var response = await _httpClient.GetAsync(uri);
+
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var recipesResponse = JsonConvert.DeserializeObject<PaginationResponse<Recipe>>(content);
+
+            return recipesResponse;
+        }
+        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
+    }
+
+    public async Task<Recipe> AddAsync(Recipe recipeModel)
     {
         await PrepareAuthenticatedClientForApp();
 
@@ -44,9 +91,9 @@ public class RecipesService : IRecipesService
         if (response.StatusCode == HttpStatusCode.OK)
         {
             var responseContent = await response.Content.ReadAsStringAsync();
-            var createdRecipeId = JsonConvert.DeserializeObject<int>(responseContent);
+            var createdRecipe = JsonConvert.DeserializeObject<Recipe>(responseContent);
 
-            return createdRecipeId;
+            return createdRecipe;
         }
 
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}.");
@@ -100,53 +147,7 @@ public class RecipesService : IRecipesService
         }
         throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
     }
-    public async Task<RecipesResponse> GetRecentsAsync(int page, int pageSize)
-    {
-        string uri = _recipesBaseAddress + "Recipes" + "?page=" + page + "&pageSize=" + pageSize;
-
-        var response = await _httpClient.GetAsync(uri);
-
-        if (response.StatusCode == HttpStatusCode.OK)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-
-            var recipesResponse = JsonConvert.DeserializeObject<RecipesResponse>(content);
-
-            return recipesResponse;
-        }
-        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
-    }
-
-    public async Task<Recipe> GetAsync(int id)
-    {
-        var response = await _httpClient.GetAsync($"{_recipesBaseAddress}Recipes/{id}");
-
-        if (response.StatusCode == HttpStatusCode.OK)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            var recipe = JsonConvert.DeserializeObject<Recipe>(content);
-
-            return recipe;
-        }
-        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
-    }
-
-    public async Task<RecipesResponse> GetByKeyword(string keyword, int page, int pageSize)
-    {
-        string uri = _recipesBaseAddress + "Recipes/search" + "?keyword=" + WebUtility.UrlEncode(keyword) + "&page=" + page + "&pageSize=" + pageSize;
-
-        var response = await _httpClient.GetAsync(uri);
-
-        if (response.StatusCode == HttpStatusCode.OK)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            var recipesResponse = JsonConvert.DeserializeObject<RecipesResponse>(content);
-
-            return recipesResponse;
-        }
-        throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}");
-    }
-
+    
     private async Task PrepareAuthenticatedClientForApp()
     {
         var accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { _usersScope });

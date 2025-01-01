@@ -15,30 +15,30 @@
     </div>
 </div>
 
-<EditForm Model="recipeModel" OnValidSubmit="SubmitRecipe" class="ingredient-display my-5 mx-lg-4 mx-2 p-2 border-3 border-warning header">
+<EditForm Model="recipe" OnValidSubmit="SubmitRecipe" class="ingredient-display my-5 mx-lg-4 mx-2 p-2 border-3 border-warning header">
     <DataAnnotationsValidator />
     <div class="row mt-3">
         <div class="col-md-3">
             <label class="text-lg">Recipe Name:</label>
-            <InputText @bind-Value="recipeModel.Name" class="form-control" />
-            <ValidationMessage For="@(() => recipeModel.Name)" />
+            <InputText @bind-Value="recipe.Name" class="form-control" />
+            <ValidationMessage For="@(() => recipe.Name)" />
         </div>
         <div class="col-md-9">
             <label class="text-lg">Recipe Description:</label>
-            <InputText @bind-Value="recipeModel.Description" class="form-control" />
-            <ValidationMessage For="@(() => recipeModel.Description)" />
+            <InputText @bind-Value="recipe.Description" class="form-control" />
+            <ValidationMessage For="@(() => recipe.Description)" />
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-md-12">
             <label class="text-lg">Recipe Instructions:</label>
-            <textarea @bind="recipeModel.Instructions" class="form-control"></textarea>
-            <ValidationMessage For="@(() => recipeModel.Instructions)" />
+            <textarea @bind="recipe.Instructions" class="form-control"></textarea>
+            <ValidationMessage For="@(() => recipe.Instructions)" />
         </div>
     </div>
 
-    @foreach (var ingredient in recipeModel.Ingredients)
+    @foreach (var ingredient in recipe.Ingredients)
     {
         <div class="row mt-3">
             <div class="col-3">
@@ -121,12 +121,12 @@
 </EditForm>
 
 <div class="row mt-2 mx-4">
-    @if (createdRecipeId >= 0 && hasSubmitted == true)
+    @if (createdRecipe != null && hasSubmitted == true)
     {
         <div class="alert alert-success">Your recipe was submitted. It will be reviewed before being permanently added to the site.</div>
-        <RecipeCards RecipesList="addedRecipesList"></RecipeCards>
+        <RecipeCards RecipesList="recipesList"></RecipeCards>
     }
-    else if (createdRecipeId <= 0 && hasSubmitted == true)
+    else if (createdRecipe != null && hasSubmitted == true)
     {
         <div class="alert alert-danger">There was an error. If the issue persists, please email support at tybardesigns@gmail.com</div>
     }
@@ -134,10 +134,10 @@
 
 
 @code {
-    private Recipe recipeModel = new Recipe();
-    private List<Recipe> addedRecipesList = new();
+    private Recipe recipe = new Recipe();
+    private List<Recipe> recipesList = new();
     private const long maxFileSize = 1024 * 1024 * 3;
-    private int createdRecipeId;
+    private Recipe createdRecipe;
     private bool hasSubmitted = false;
     private bool fileLoading;
     private string? newFileName;
@@ -168,7 +168,7 @@
                 Path.GetExtension(selectedFile!.Name)
             );
             var blobUrl = await BlobStorageService.UploadFileToBlobAsync(newFileName, selectedFile.ContentType, selectedFile.OpenReadStream(maxFileSize));
-            recipeModel.ImageUrl = blobUrl;
+            recipe.ImageUrl = blobUrl;
         }
         catch (Exception ex)
         {
@@ -186,16 +186,9 @@
             {
                 await OnUploadSubmit();
             }
-            createdRecipeId = await RecipesService.AddAsync(recipeModel);
+            createdRecipe = await RecipesService.AddAsync(recipe);
 
-            Recipe recipeDto = new Recipe
-            {
-                Id = createdRecipeId,
-                Name = recipeModel.Name,
-                Description = recipeModel.Description,
-                ImageUrl = recipeModel.ImageUrl
-            };
-            addedRecipesList.Add(recipeDto);
+            recipesList.Add(createdRecipe);
             hasSubmitted = true;
             StateHasChanged();
         }
@@ -213,7 +206,7 @@
 
         try
         {
-            if (addedRecipesList.Count <= 0)
+            if (recipesList.Count <= 0)
             {
                 await BlobStorageService.DeleteFileToBlobAsync(newFileName!);
             }
@@ -227,11 +220,11 @@
 
     private void AddRecipeIngredient()
     {
-        recipeModel.Ingredients.Add(new Ingredient());
+        recipe.Ingredients.Add(new Ingredient());
     }
 
     private void RemoveRecipeIngredient(Ingredient ingredientToRemove)
     {
-        recipeModel.Ingredients.Remove(ingredientToRemove);
+        recipe.Ingredients.Remove(ingredientToRemove);
     }
 }

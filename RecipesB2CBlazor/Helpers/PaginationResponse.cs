@@ -2,7 +2,7 @@
 
 namespace RecipesB2CBlazor.Helpers;
 
-public class RecipesResponse
+public class PaginationResponse<T> where T : class
 {
     public int TotalCount { get; set; }
 
@@ -10,5 +10,5 @@ public class RecipesResponse
 
     public int CurrentPageNumber { get; set; } = 1;
 
-    public List<Recipe>? Data { get; set; }
+    public List<T>? Data { get; set; }
 }

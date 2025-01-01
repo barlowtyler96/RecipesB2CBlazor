@@ -22,4 +22,6 @@ public class Recipe
 
     [Required]
     public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+
+    public bool IsFavorited { get; set; } = false;
 }

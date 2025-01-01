@@ -22,21 +22,19 @@ else
                         <p class="text-sm card-text">@r.Description</p>
                     </div>
                     <div class="card-footer card-footer-bg">
-                        <button @onclick="(() => ShowRecipe(r.Id))" class="btn btn-custom-primary">View Full Recipe</button>
-                        @foreach(var uf in UserFavorites)
+                        <button @onclick="(() => ShowRecipe(r))" class="btn btn-custom-primary">View Full Recipe</button>
+                        @if (r.IsFavorited)
                         {
-                            @if (r.Id == uf)
-                            {
-                                <button @onclick="(() => DeleteFavoriteRecipe(r.Id))" class="btn btn-custom-primary">
-                                </button>
+                            <button @onclick="(() => DeleteFavoriteRecipe(r.Id))" class="btn btn-custom-primary mx-1">
                                 <i class="fa-solid fa-heart fa-lg" style="color: black;"></i>
-                            }
-                            else
-                            {
-                                <button @onclick="(() => AddFavoriteRecipe(r.Id))" class="btn btn-custom-primary">
-                                </button>
+                            </button>
+                            
+                        }
+                        else
+                        {
+                            <button @onclick="(() => AddFavoriteRecipe(r.Id))" class="btn btn-custom-primary mx-1">
                                 <i class="fa-regular fa-heart fa-lg" style="color: black;"></i>
-                            }
+                            </button>
                             
                         }
                     </div>
@@ -47,7 +45,7 @@ else
     
     @if (ShowingRecipe)
     {
-        <ViewRecipe RecipeId="@SelectedRecipeId" />
+        <ViewRecipe recipe="SelectedRecipe" />
         <div class="text-center mb-5">
             <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 shadow-lg">Hide</button>
         </div>
@@ -59,16 +57,16 @@ else
     public List<Recipe>? RecipesList { get; set; }
     [Parameter]
     public List<int> UserFavorites { get; set; } = new List<int>();
-    private int SelectedRecipeId { get; set; }
+    private Recipe? SelectedRecipe { get; set; }
     private bool ShowingRecipe { get; set; } = false;
 
 
-    private async Task ShowRecipe(int recipeId)
+    private async Task ShowRecipe(Recipe recipe)
     {
-        SelectedRecipeId = recipeId;
+        SelectedRecipe = recipe;
         ShowingRecipe = !ShowingRecipe;
 
-        await Task.Delay(500);
+        await Task.Delay(100);
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 
