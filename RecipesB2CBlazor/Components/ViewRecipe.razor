@@ -46,11 +46,10 @@ else if (recipe != null)
     List<Ingredient> firstHalfIngredients = new();
     List<Ingredient> secondHalfIngredients = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         try
         {
-
             var halfCount = recipe.Ingredients.Count / 2;
 
             firstHalfIngredients = recipe.Ingredients.Take(halfCount).ToList();

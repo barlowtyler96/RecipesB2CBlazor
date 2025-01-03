@@ -23,20 +23,29 @@ else
                     </div>
                     <div class="card-footer card-footer-bg">
                         <button @onclick="(() => ShowRecipe(r))" class="btn btn-custom-primary">View Full Recipe</button>
-                        @if (r.IsFavorited)
-                        {
-                            <button @onclick="(() => DeleteFavoriteRecipe(r.Id))" class="btn btn-custom-primary mx-1">
-                                <i class="fa-solid fa-heart fa-lg" style="color: black;"></i>
-                            </button>
-                            
-                        }
-                        else
-                        {
-                            <button @onclick="(() => AddFavoriteRecipe(r.Id))" class="btn btn-custom-primary mx-1">
-                                <i class="fa-regular fa-heart fa-lg" style="color: black;"></i>
-                            </button>
-                            
-                        }
+                        <AuthorizeView>
+                            <Authorized>
+                                @if (r.IsFavorited)
+                                {
+                                    <button @onclick="(() => DeleteFavoriteRecipe(r.Id))" class="btn btn-custom-primary mx-1">
+                                        <i class="fa-solid fa-heart fa-lg" style="color: black;"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button @onclick="(() => AddFavoriteRecipe(r.Id))" class="btn btn-custom-primary mx-1">
+                                        <i class="fa-regular fa-heart fa-lg" style="color: black;"></i>
+                                    </button>
+
+                                }
+                            </Authorized>
+                            <NotAuthorized>
+                                <a href="MicrosoftIdentity/Account/SignIn" class="btn btn-custom-primary mx-1">
+                                    <i class="@((r.IsFavorited ? "fa-solid fa-heart" : "fa-regular fa-heart")) fa-lg" style="color: black;"></i>
+                                </a>
+                            </NotAuthorized>
+                        </AuthorizeView>
                     </div>
                 </div>
             </div>
@@ -55,8 +64,6 @@ else
 @code {
     [Parameter]
     public List<Recipe>? RecipesList { get; set; }
-    [Parameter]
-    public List<int> UserFavorites { get; set; } = new List<int>();
     private Recipe? SelectedRecipe { get; set; }
     private bool ShowingRecipe { get; set; } = false;
 
@@ -70,14 +77,28 @@ else
         await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
     }
 
-    private async Task DeleteFavoriteRecipe(int recipeId)
+    private async Task DeleteFavoriteRecipe(int id)
     {
-        await UsersService.DeleteUserFavoriteAsync(recipeId);
+        try
+        {
+            await UsersService.DeleteUserFavoriteAsync(id);
+        }
+        catch(Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+        
 
     }
-    private async Task AddFavoriteRecipe( int recipeId)
+    private async Task AddFavoriteRecipe(int id)
     {
-        await UsersService.AddUserFavoriteAsync(recipeId);
-
+        try
+        {
+            await UsersService.AddUserFavoriteAsync(id);
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
     }
 }

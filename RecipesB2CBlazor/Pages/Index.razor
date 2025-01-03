@@ -1,6 +1,5 @@
 ﻿@inject IRecipesService RecipesService
 @inject IUsersService UsersService
-@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @page "/"
 @using RecipesB2CBlazor.Helpers;
@@ -24,7 +23,7 @@
 @if (recipesResponse.Data is not null)
 {
     <div class="container-fluid">
-        <RecipeCards UserFavorites="@userFavorites" RecipesList="@recipesResponse.Data" />
+        <RecipeCards RecipesList="@recipesResponse.Data" />
     </div>
     <div class="container-fluid">
         <div class="row py-3 text-center">
@@ -39,14 +38,12 @@
 
 @code {
     private PaginationResponse<Recipe> recipesResponse = new ();
-    private List<int> userFavorites = new List<int>();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             recipesResponse = await RecipesService.GetRecentsAsync(recipesResponse.CurrentPageNumber, recipesResponse.PageSize);
-            //userFavorites = await UsersService.GetUserFavoritesAsync();
         }
         catch (Exception ex)
         {
