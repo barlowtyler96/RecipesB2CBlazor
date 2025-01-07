@@ -19,6 +19,7 @@ public class Recipe
     public string Instructions { get; set; }
 
     public string ImageUrl { get; set; }
+    public User CreatedBy { get; set; }
 
     [Required]
     public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
