@@ -1,0 +1,85 @@
+﻿<div class="modal @ModalClass my-3" tabindex="-1" role="dialog" style="display:@ModalDisplay">
+    @if (Recipe != null)
+    {
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="col-12 text-xl fw-bold text-center mt-4">
+                        @Recipe.Name
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="offset-lg-1 col-lg-5 mt-5 text-center">
+                            @Recipe.Instructions <br>
+                            <img class="view-recipe-image mt-4 px-md-5" src="@Recipe.ImageUrl">
+                        </div>
+                        <div class="offset-lg-1 col-lg-2 col-sm-12 mt-5">
+                            <ul class="list-unstyled">
+                                @foreach (var i in firstHalfIngredients)
+                                {
+                                    <li class="ingredient-display p-2 bg-white my-2">
+                                        <i class="fa-solid fa-wheat-awn"></i> &nbsp; @i.Amount @i.Unit @i.Name
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-sm-12 mt-md-5">
+                            <ul class="list-unstyled">
+                                @foreach (var i in secondHalfIngredients)
+                                {
+                                    <li class="ingredient-display p-2 bg-white my-2">
+                                        <i class="fa-solid fa-wheat-awn"></i> &nbsp; @i.Amount @i.Unit @i.Name
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between w-100">
+                    <div class="fst-italic">
+                        Shared By: @Recipe.CreatedBy.FirstName @Recipe.CreatedBy.LastName
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Close()">Close</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+    private Recipe? Recipe { get; set; }
+    private List<Ingredient> firstHalfIngredients = new();
+    private List<Ingredient> secondHalfIngredients = new();
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    public void Open(Recipe recipe)
+    {
+        Recipe = recipe;
+        var halfCount = recipe.Ingredients.Count / 2;
+
+        firstHalfIngredients = recipe.Ingredients.Take(halfCount).ToList();
+        secondHalfIngredients = recipe.Ingredients.Skip(halfCount).ToList();
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        StateHasChanged();
+    }
+}

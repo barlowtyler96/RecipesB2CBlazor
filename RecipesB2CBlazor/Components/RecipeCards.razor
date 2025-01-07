@@ -1,6 +1,5 @@
 ﻿@inject IRecipesService RecipesService
 @inject IUsersService UsersService
-@inject IJSRuntime JSRuntime
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 @if (RecipesList is null)
@@ -22,7 +21,7 @@ else
                         <p class="text-sm card-text">@r.Description</p>
                     </div>
                     <div class="card-footer card-footer-bg">
-                        <button @onclick="(() => ShowRecipe(r))" class="btn btn-custom-primary">View Full Recipe</button>
+                        <button class="btn btn-custom-primary mx-1 border-1 border-black" @onclick="() => RecipeModal.Open(r)">View Recipe</button>
                         <AuthorizeView>
                             <Authorized>
                                 @if (r.IsFavorited)
@@ -51,31 +50,15 @@ else
             </div>
         }
     </div>
-    
-    @if (ShowingRecipe)
-    {
-        <ViewRecipe recipe="SelectedRecipe" />
-        <div class="text-center mb-5">
-            <button @onclick="() => ShowingRecipe = false" class="btn btn-outline-danger col-4 shadow-lg">Hide</button>
-        </div>
-    }
+    <RecipeModal @ref="RecipeModal"></RecipeModal>
 }
 
 @code {
     [Parameter]
     public List<Recipe>? RecipesList { get; set; }
+    private RecipeModal RecipeModal { get; set; }
     private Recipe? SelectedRecipe { get; set; }
-    private bool ShowingRecipe { get; set; } = false;
 
-
-    private async Task ShowRecipe(Recipe recipe)
-    {
-        SelectedRecipe = recipe;
-        ShowingRecipe = !ShowingRecipe;
-
-        await Task.Delay(100);
-        await JSRuntime.InvokeVoidAsync("scrollToElement", "viewrecipe");
-    }
 
     private async Task DeleteFavoriteRecipe(int id)
     {
