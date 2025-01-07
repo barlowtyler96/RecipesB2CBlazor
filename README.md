@@ -18,10 +18,6 @@
 * Web API consumption
 * Server-Side paging for pagination component
 
-
-## Database Schema
-![](ReadMeImages/culinaryshares-entity-relationship.PNG)
-
 ## Sample Video: 
 [![Sample Video](https://img.youtube.com/vi/_8VXPkA6Rto/0.jpg)](https://www.youtube.com/watch?v=_8VXPkA6Rto)
 
